@@ -16,7 +16,7 @@
 }
 
 .tel-number input {
-    border: 1px solid #ccc;
+    border: 1px solid #ccc !important;
     letter-spacing: .5px;
     padding: 6px !important;
     padding-right: 23px !important;
@@ -137,7 +137,6 @@
 
 .tel-with-flag .tel-number input {
     border-left: 1px;
-    border: 1px solid #ccc;
 }
 
 .tel-flags-can-change {
