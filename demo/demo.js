@@ -23,11 +23,13 @@ function initializeComponent() {
         messages: messages
     };
     
+    var initialValue = document.getElementById('initialValue').value;
+    
     var tel = document.getElementById('tel');
     tel.className = 'tel';
     var telNumber = document.createElement('div');
     telNumber.className = 'tel-number';
-    telNumber.innerHTML = '<input id="telephone" required type="text" data-value="" data-validations="tel-validations" data-country="' + document.getElementById('country').value + '" data-areaCode="telephoneAreaCode" data-number="telephoneNumber" />';
+    telNumber.innerHTML = '<input id="telephone" required type="text" data-value="' + initialValue + '" data-validations="tel-validations" data-country="' + document.getElementById('country').value + '" data-areaCode="telephoneAreaCode" data-number="telephoneNumber" />';
     var telValidations = document.createElement('div');
     telValidations.id = 'tel-validations';
     telValidations.className = 'tel-validations';
