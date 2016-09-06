@@ -1,0 +1,48 @@
+{
+  "name": "js-telephone-input",
+  "version": "0.1.0",
+  "description": "Input with telephone mask and validations for each country.",
+  "private": true,
+  "author": "frontend@mercadolibre.com",
+  "scripts": {
+    "start": "./node_modules/.bin/serve .",
+    "build": "./node_modules/.bin/gulp build",
+    "dist": "./node_modules/.bin/gulp dist",
+    "test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS",
+    "install-selenium": "./node_modules/selenium-standalone/bin/selenium-standalone install",
+    "nightwatch": "./node_modules/.bin/nightwatch",
+    "gh-pages": "./node_modules/.bin/gulp deploy:gh-pages",
+    "swift": "./node_modules/.bin/gulp deploy:swift"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mercadolibre/js-telephone-input"
+  },
+  "homepage": "https://github.com/mercadolibre/js-telephone-input",
+  "bugs": {
+    "url": "https://github.com/mercadolibre/js-telephone-input/issues"
+  },
+  "dependencies": {
+    "intl-tel-input": "9.0.9"
+  },
+  "devDependencies": {
+    "chai": "3.2.0",
+    "chai-spies": "0.7.0",
+    "deepmerge": "0.2.10",
+    "gulp": "3.9.1",
+    "gulp-sync": "0.1.4",
+    "karma": "0.13.9",
+    "karma-chai": "0.1.0",
+    "karma-chai-spies": "0.1.4",
+    "karma-coverage": "0.5.2",
+    "karma-mocha": "0.2.0",
+    "karma-mocha-reporter": "1.1.1",
+    "karma-phantomjs-launcher": "0.2.1",
+    "mocha": "2.3.2",
+    "nightwatch": "0.8.18",
+    "phantomjs": "1.9.16",
+    "selenium-standalone": "4.4.0",
+    "serve": "1.4.0",
+    "ui-gulp_tasks": "^1.7.6"
+  }
+}

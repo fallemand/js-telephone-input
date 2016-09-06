@@ -1,0 +1,34 @@
+<!doctype html>
+<html class="no-js" lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Telephone </title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://http2.mlstatic.com/secure/org-img/ch/ui/1.1.1/chico.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../ui-build/css/js-telephone-input.css">
+
+</head>
+
+<body>
+    <form>
+        <div id="tel" class="tel">
+            <div class="tel-number">
+                <input id="telephone" required type="text" data-value="" data-validations="tel-validations" data-country="ar" data-areaCode="telephoneAreaCode" data-number="telephoneNumber" />
+            </div>
+            <div id="tel-validations" class="tel-validations"></div>
+        </div>
+    </form>
+
+    <h3>Resultado</h3>
+    <span class="result">Código Área: </span> <input id="telephoneAreaCode" type="text" name="sellerContact.areaCode" /> <br />
+    <span class="result">Teléfono: </span> <input id="telephoneNumber" type="text" name="sellerContact.phone" />
+
+    <script src="../ui-build/js/js-telephone-input.js"></script>
+    <script src="demo-standalone.js"></script>
+</body>
+
+</html>

@@ -10,7 +10,7 @@
 
     <link href="https://http2.mlstatic.com/secure/org-img/ch/ui/1.1.1/chico.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="demo.css">
-    <link rel="stylesheet" href="../component/styles/telephone-input-mask.css">
+    <link rel="stylesheet" href="../ui-build/css/js-telephone-input.css">
     <link href='https://fonts.googleapis.com/css?family=Lato:400,300,100,700' rel='stylesheet' type='text/css'>
 
     <!--[if lt IE 9]>
@@ -25,12 +25,11 @@
         <span class="result">País: </span> <select id="country"><option>ar</option><option selected>mx</option></select> <br />
         <span class="result">Usar Bandera: </span> <select id="withFlag"><option>Si</option><option selected>No</option></select> <br />
         <span class="result">Cambiar Bandera: </span> <select id="canChangeCountry"><option>Si</option><option selected>No</option></select> <br />
-        <span class="result">Completar Máscara: </span> <select id="completeMask"><option>Si</option><option selected>No</option></select> <br />
-        <span class="result">Requerido: </span> <select id="required"><option selected>Si</option><option>No</option></select> <br /> 
-        <span class="result">Valor Inicial: </span> <input class="initial-value" id="initialValue"></input> <br /> 
-        <button class="ch-btn ch-btn-small" onclick="initializeComponent()">Guardar</button>
+        <span class="result">Requerido: </span> <select id="required"><option selected>Si</option><option>No</option></select> <br />
+        <span class="result">Valor Inicial: </span> <input class="initial-value" id="initialValue"></input> <br />
+        <button class="ch-btn ch-btn-small" onclick="changeParameters()">Guardar</button>
     </div>
-    
+
     <div class="ch-box-lite">
         <h1>Telephone Input</h1>
         <form>
@@ -42,14 +41,14 @@
             </div>
         </form>
     </div>
-    
+
     <div class="ch-box-lite">
-        <h2>Resultado</h1>
+        <h2>Resultado</h2>
         <span class="result">Código Área: </span> <input id="telephoneAreaCode" type="text" name="sellerContact.areaCode" /> <br />
-        <span class="result">Teléfono: </span> <input id="telephoneNumber" type="text" name="sellerContact.phone" /> 
+        <span class="result">Teléfono: </span> <input id="telephoneNumber" type="text" name="sellerContact.phone" />
     </div>
-    
-    <script src="../component/js/telephone-input-mask.js"></script>
+
+    <script src="../ui-build/js/js-telephone-input.js"></script>
     <script src="demo.js"></script>
 </body>
 

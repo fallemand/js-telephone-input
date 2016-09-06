@@ -110,7 +110,7 @@
     margin-top: -12px;
     width: 14px;
     position: absolute;
-    background-image: url("../img/sprite-icons-validate.png");
+    background-image: url("../images/sprite-icons-validate.png");
     background-position: 0 0;
     background-repeat: no-repeat;
 }
@@ -222,7 +222,7 @@
     vertical-align: text-top;
     display: inline-block;
     box-shadow: 0 0 1px 0 #888;
-    background-image: url("../img/flags.png");
+    background-image: url("../images/flags.png");
     background-repeat: no-repeat;
     background-color: #DBDBDB;
     background-position: 20px 0;
@@ -231,7 +231,7 @@
 @media (min-resolution: 144dpi),
     (min-resolution: 1.5dppx) {
     .tel-flag {
-        background-image: url("../img/flags@2x.png")
+        background-image: url("../images/flags@2x.png")
     }
 }
 
