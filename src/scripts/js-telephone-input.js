@@ -1,10 +1,13 @@
-/* Google libphonenumber. Lite Versión by jackocnr
-   More info: http://jackocnr.com/intl-tel-input.html */
-require('./node_modules/intl-tel-input/build/js/utils');
-
-function telephoneInputMask(field, parameters) {
+global.jsTelephoneInput = function(field, parameters) {
 
     'use strict';
+
+    /* Google's libphonenumber pre-compiled
+     More info: https://github.com/grantila/awesome-phonenumber */
+    var PhoneNumber = require('awesome-phonenumber');
+
+    /* Country List: Define here the countries you want to be visible */
+    var countriesList = require('./country-list');
 
     //Check if parameters exists.
     if(!field || !parameters) {
@@ -16,26 +19,26 @@ function telephoneInputMask(field, parameters) {
     var country = (parameters.country) ? parameters.country : field.getAttribute('data-country').toLocaleLowerCase(),
         codeAreaInput = (parameters.codeAreaInput) ? parameters.codeAreaInput : document.getElementById(field.getAttribute('data-areaCode')),
         numberInput = (parameters.numberInput) ? parameters.numberInput : document.getElementById(field.getAttribute('data-number')),
-        metadata = getMetadata(country),
+        fullNumberInput = (parameters.fullNumberInput) ? parameters.fullNumberInput : document.getElementById(field.getAttribute('data-fullNumber')),
+        classNames = {
+            inputErrorClass : ' tel-validations-input-error',
+            showClass : ' show'
+        },
         validations = getValidations(),
         elements = getElements(),
         preventKeyup = false,
-        pristine = true;
+        phoneNumber,
+        exampleNumber;
 
-    if (metadata) {
-        //Define common metadata
-        metadata.inputErrorClass = ' tel-validations-input-error';
-        metadata.maskCharacters = ['(', ')', '-'];
-        metadata.showClass = ' show';
+    //Validate User Default Value
+    validateInitialValue();
 
-        //Validate User Default Value
-        validateInitialValue();
-
-        //Define field attributes and events
-        addEvent(field, 'keyup', changed);
-        addEvent(field, 'keypress', checkPressedKey);
-        addEvent(field, 'blur', setInputsValue);
-    }
+    //Define field events and attributes
+    addEvent(field, 'keyup', changed);
+    addEvent(field, 'click', changed);
+    addEvent(field, 'keypress', checkPressedKey);
+    addEvent(field, 'blur', setInputsValue);
+    setExampleNumber(country);
 
     //Validate default telephone
     function validateInitialValue() {
@@ -45,35 +48,35 @@ function telephoneInputMask(field, parameters) {
                 validations.show(validations.elements.invalidDefaultNumber, true, false);
             }
         }
-        else {
-            field.setAttribute('placeholder', metadata.example);
-        }
     }
 
-    // Principal event - Fired on click and keyup
+    // Principal event - Fired on keyup
     function changed() {
         if (preventKeyup) {
             preventKeyup = false;
             return;
         }
-        field.value = intlTelInputUtils.formatNumber(field.value, country, intlTelInputUtils.numberFormat.NATIONAL);
+        phoneNumber = PhoneNumber(field.value, country);
+        var telephone = phoneNumber.getNumber('national');
+        if(telephone) {
+            field.value = telephone;
+        }
         validations.isValid();
     }
 
     // Strips everything that's not a number
     function stripValue(maskedValue) {
         return maskedValue.split('').filter(isDigit);
-    }
 
-    // Checks is char is a number
-    function isDigit(char) {
-        return /\d/.test(char);
+        function isDigit(char) {
+            return /\d/.test(char);
+        }
     }
 
     // Validates only number
     function checkPressedKey(event) {
         var charCode = (event.which) ? event.which : event.keyCode;
-        if (isNotANumber(charCode)) {
+        if (!isCharCodeNumber(charCode)) {
             event.preventDefault();
             validations.show(validations.elements.numbers, true);
             highlightInput();
@@ -81,20 +84,25 @@ function telephoneInputMask(field, parameters) {
         }
 
         function highlightInput() {
-            if (!field.className || field.className.indexOf(metadata.inputErrorClass) === -1) {
-                field.className += metadata.inputErrorClass;
+            if (!field.className || field.className.indexOf(classNames.inputErrorClass) === -1) {
+                field.className += classNames.inputErrorClass;
                 setTimeout(function () {
-                    field.className = field.className.replace(metadata.inputErrorClass, '');
+                    field.className = field.className.replace(classNames.inputErrorClass, '');
                 }, 200);
             }
         }
 
-        function isNotANumber(charCode) {
+        function isCharCodeNumber(charCode) {
             if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-                return true;
+                return false;
             }
-            return false;
+            return true;
         }
+    }
+
+    // Get an example number for the country
+    function getExampleNumber(countryCode) {
+        return PhoneNumber.getExample(countryCode, 'fixed-line').getNumber('national');
     }
 
     // Define all the validations
@@ -105,7 +113,7 @@ function telephoneInputMask(field, parameters) {
         validations.parent = document.getElementById(field.getAttribute('data-validations'));
         validations.elements = {
             valid: createValidation('valid', 'tel-validations-success tel-validations-valid'),
-            possible: createValidation('possible', 'tel-validations-success tel-validations-possible'),
+            possible: createValidation('possible', 'tel-validations-error tel-validations-possible'),
             notANumber: createValidation('notANumber', 'tel-validations-error tel-validations-not-a-number'),
             min: createValidation('min', 'tel-validations-error tel-validations-min'),
             invalidDefaultNumber: createValidation('invalidDefaultNumber', 'tel-validations-error tel-validations-invalid-default-number'),
@@ -123,7 +131,7 @@ function telephoneInputMask(field, parameters) {
             for (var type in validations.elements) {
                 if (validations.elements.hasOwnProperty(type)) {
                     if (validationExcluded !== validations.elements[type]) {
-                        validations.elements[type].className = validations.elements[type].className.replace(metadata.showClass, '');
+                        validations.elements[type].className = validations.elements[type].className.replace(classNames.showClass, '');
                     }
                 }
             }
@@ -140,53 +148,48 @@ function telephoneInputMask(field, parameters) {
                     elements.tel.className += telClass;
                 }
             }
-            validations.parent.className += (validations.parent.className.indexOf(metadata.showClass) === -1) ? metadata.showClass : '';
-            validation.className += (validation.className.indexOf(metadata.showClass) === -1) ? metadata.showClass : '';
+            validations.parent.className += (validations.parent.className.indexOf(classNames.showClass) === -1) ? classNames.showClass : '';
+            validation.className += (validation.className.indexOf(classNames.showClass) === -1) ? classNames.showClass : '';
         };
 
         //Hide a specific validation
         validations.hide = function (validation) {
-            validation.className = validation.className.replace(metadata.showClass, '');
+            validation.className = validation.className.replace(classNames.showClass, '');
             //syi.validationsFixer.fixValidationsPosition();
         };
 
         // Checks if the number is valid and shows the validations
         validations.isValid = function () {
             if (field.value.length === 0) {
-                pristine = true;
                 validations.reset();
                 if(!parameters.required) {
                     return true;
                 }
+                return false;
             }
-            var isValid = intlTelInputUtils.isValidNumber(field.value, country);
-            if(isValid) {
+            if(phoneNumber.isValid()) {
                 validations.show(validations.elements.valid, true, true);
-                pristine = false;
                 return true;
             }
-            else {
-                switch(intlTelInputUtils.getValidationError(field.value, country)) {
-                    case intlTelInputUtils.validationError.TOO_SHORT :
-                        if(!pristine) {
-                            validations.show(validations.elements.min, true, false);
-                        }
+            if(phoneNumber.toJSON().possibility) {
+                switch(phoneNumber.toJSON().possibility) {
+                    case 'too-short' :
+                        validations.show(validations.elements.min, true, false);
                         break;
-                    case intlTelInputUtils.validationError.TOO_LONG :
+                    case 'too-long' :
                         validations.show(validations.elements.max, true, false);
                         break;
-                    case intlTelInputUtils.validationError.NOT_A_NUMBER :
-                        validations.show(validations.elements.notANumber, true, false);
+                    case 'unknown' :
+                        //validations.show(validations.elements.notANumber, true, false);
                         break;
-                    case intlTelInputUtils.validationError.IS_POSSIBLE :
+                    case 'is-possible' :
                         validations.show(validations.elements.possible, true, false);
                         break;
                 }
+                validations.show(validations.info.zero, false);
+                //syi.validationsFixer.fixValidationsPosition();
             }
-            validations.show(validations.info.zero, false);
-            //syi.validationsFixer.fixValidationsPosition();
             return false;
-
         };
 
         // Replaces the validations message with a specific variable
@@ -194,7 +197,13 @@ function telephoneInputMask(field, parameters) {
             var start = validation.innerHTML.indexOf('##'),
                 end = validation.innerHTML.lastIndexOf('##'),
                 variable = validation.innerHTML.substring(start + 2, end);
-            validation.innerHTML = (start > -1) ? validation.innerHTML.replace('##' + variable + '##', metadata[variable]) : validation.innerHTML;
+            validation.innerHTML = (start > -1) ? validation.innerHTML.replace('##' + variable + '##', getTextToRepalce(variable) ) : validation.innerHTML;
+
+            function getTextToRepalce(variable) {
+                switch(variable) {
+                    case 'example' : return getExampleNumber(country)
+                }
+            }
         }
 
         // Creates the validation
@@ -208,17 +217,24 @@ function telephoneInputMask(field, parameters) {
             validations.parent.appendChild(validation);
             return validation;
         }
+
         return validations;
     }
 
     // Sets the value on the hidden inputs
     function setInputsValue() {
-        pristine = false;
         if (validations.isValid()) {
             validations.hide(validations.info.zero);
             var telephone = getTelephone();
-            numberInput.value = telephone.telephone;
-            codeAreaInput.value = telephone.areaCode;
+            if(numberInput) {
+                numberInput.value = telephone.telephone;
+            }
+            if(codeAreaInput) {
+                codeAreaInput.value = telephone.areaCode;
+            }
+            if(fullNumberInput) {
+                fullNumberInput.value = telephone.fullTelephone;
+            }
             return true;
         }
         numberInput.value = '';
@@ -228,59 +244,26 @@ function telephoneInputMask(field, parameters) {
 
     // Gets the telephone area code and number
     function getTelephone() {
+        var areaCodeLimit = field.value.indexOf(' ');
+        //If the telephone does not contain spaces, cut the areaCode using the "-"
+        if(areaCodeLimit === -1) {
+            areaCodeLimit = field.value.indexOf('-');
+        }
+        else {
+            //If there are multiple spaces, use the first two parts as the areaCode.
+            if((field.value.match(/\s/g) || []).length > 2) {
+                areaCodeLimit = field.value.indexOf(' ', areaCodeLimit + 1);
+            }
+        }
         return {
             fullTelephone: stripValue(field.value).join(''),
-            areaCode: field.value.substring(field.value.lastIndexOf('(') + 1, field.value.lastIndexOf(')')),
-            telephone: stripValue(field.value.substring(field.value.lastIndexOf(')') + 1, field.value.length)).join('')
+            areaCode: stripValue(field.value.substring(0, areaCodeLimit)).join(''),
+            telephone: stripValue(field.value.substring(areaCodeLimit + 1, field.value.length)).join('')
         }
     }
 
     // Creates sub components (Country list menu)
     function getElements() {
-        function findAncestor(el, cls) {
-            while ((el = el.parentElement) && !el.classList.contains(cls));
-            return el;
-        }
-
-        // Creates list of countries
-        function createCountriesList(elements) {
-            var countries = getCountries();
-            for (var country in countries) {
-                if (countries.hasOwnProperty(country)) {
-                    var listItem = document.createElement('li');
-                    listItem.className = 'tel-flags-list-item';
-                    listItem.innerHTML = '<div class="tel-flags-list-item-flag ' + countries[country].shortName + '"></div><span class="tel-flags-list-item-name">' + countries[country].name + '</span><span class="tel-flags-list-item-code">' + countries[country].code + '</span>';
-                    elements.telFlagsList.appendChild(listItem);
-                }
-            }
-        }
-
-        // Creates events of the component
-        function createEvents(elements) {
-
-            function showCountryList() {
-                if (elements.telFlagsList.className.indexOf('show') > -1) {
-                    elements.telFlagsList.className = elements.telFlagsList.className.replace(' show', '');
-                } else {
-                    elements.telFlagsList.className = 'tel-flags-list show';
-                }
-            }
-
-            function hideCountryList(event) {
-                if (event.target.className.indexOf('tel-flags') === -1) {
-                    elements.telFlagsList.className = elements.telFlagsList.className.replace(' show', '');
-                }
-            }
-
-            elements.telFlagsSelected.onclick = showCountryList;
-            addEvent(document, 'mouseup', hideCountryList);
-        }
-
-        // Sets the default country
-        function setDefaultCountry(elements) {
-            elements.telFlagsSelected.innerHTML = '<div class="tel-flags-list-item-flag ' + country + '"></div>'
-        }
-
         var elements = {};
         elements.tel = findAncestor(field, 'tel');
         elements.telNumber = findAncestor(field, 'tel-number');
@@ -306,6 +289,75 @@ function telephoneInputMask(field, parameters) {
         }
 
         return elements;
+
+        function findAncestor(el, cls) {
+            while ((el = el.parentElement) && !el.classList.contains(cls));
+            return el;
+        }
+
+        // Creates list of countries
+        function createCountriesList(elements) {
+            for (var i = 0; i < countriesList.length; i += 1) {
+                var listItem = document.createElement('li');
+                var attrCountryCode = document.createAttribute("data-country");
+                attrCountryCode.value = countriesList[i][1];
+                listItem.setAttributeNode(attrCountryCode);
+                listItem.className = 'tel-flags-list-item';
+                listItem.innerHTML = '<div class="tel-flags-list-item-flag ' + countriesList[i][1] + '"></div><span class="tel-flags-list-item-name">' + countriesList[i][0] + '</span><span class="tel-flags-list-item-code">' + countriesList[i][2] + '</span>';
+                elements.telFlagsList.appendChild(listItem);
+            }
+        }
+
+        // Creates events of the component
+        function createEvents(elements) {
+
+            function showCountryList() {
+                if (elements.telFlagsList.className.indexOf('show') > -1) {
+                    elements.telFlagsList.className = elements.telFlagsList.className.replace(' show', '');
+                } else {
+                    elements.telFlagsList.className = 'tel-flags-list show';
+                }
+            }
+
+            function hideCountryList(event, force) {
+                if ((event && event.target.className.indexOf('tel-flags') === -1) || force) {
+                    elements.telFlagsList.className = elements.telFlagsList.className.replace(' show', '');
+                }
+            }
+
+            function changeSelectedCountry(event) {
+                var newCountry = event.target.getAttribute('data-country');
+                if(!newCountry) {
+                    newCountry = event.target.parentNode.getAttribute('data-country');
+                }
+                changeSelectedFlag(country, newCountry);
+                hideCountryList(false, true);
+                changeInfoExample();
+                setExampleNumber(newCountry);
+                field.value = "";
+                setInputsValue();
+                validations.reset();
+
+                function changeSelectedFlag(actualCountryCode, newCountryCode) {
+                    var flagDiv = elements.telFlagsSelected.firstChild;
+                    flagDiv.className = flagDiv.className.replace(' ' + actualCountryCode, '') + ' ' + newCountryCode;
+                    country = newCountryCode;
+                }
+
+                function changeInfoExample() {
+                    validations.info.zero.innerHTML = validations.info.zero.innerHTML.replace(exampleNumber, getExampleNumber(country));
+                }
+            }
+
+            elements.telFlagsSelected.onclick = showCountryList;
+            addEvent(document, 'mouseup', hideCountryList);
+            addEvent(elements.telFlagsList, 'click', changeSelectedCountry);
+        }
+
+        // Sets the default country
+        function setDefaultCountry(elements) {
+            elements.telFlagsSelected.innerHTML = '<div class="tel-flags-list-item-flag ' + country + '"></div>'
+        }
     }
 
     // Add events with ie8 fallback
@@ -321,33 +373,10 @@ function telephoneInputMask(field, parameters) {
         }
     }
 
-    // Gets the metadata for a particular country
-    function getMetadata(siteId) {
-        var metadata = {
-            'mx': {
-                example: '(55)1234-5678'
-            },
-            'ar': {
-                example: '(11)1234-5678'
-            }
-        };
-        return metadata[siteId];
+    // Sets the input's placeholder and the info message
+    function setExampleNumber(countryCode) {
+        var newExampleNumber = getExampleNumber(countryCode);
+        field.setAttribute('placeholder', newExampleNumber);
+        exampleNumber = newExampleNumber;
     }
-
-    // Gets the metadata for a particular country
-    function getCountries() {
-        return [
-            {
-                'shortName': 'ar',
-                'name': 'Argentina',
-                'code': '+54'
-            },
-            {
-                'shortName': 'mx',
-                'name': 'México',
-                'code': '+55'
-            }
-        ];
-    }
-}
-
+};

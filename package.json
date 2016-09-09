@@ -22,10 +22,8 @@
   "bugs": {
     "url": "https://github.com/mercadolibre/js-telephone-input/issues"
   },
-  "dependencies": {
-    "intl-tel-input": "9.0.9"
-  },
   "devDependencies": {
+    "awesome-phonenumber": "^1.1.1",
     "chai": "3.2.0",
     "chai-spies": "0.7.0",
     "deepmerge": "0.2.10",

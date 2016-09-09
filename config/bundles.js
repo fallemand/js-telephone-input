@@ -8,7 +8,7 @@ exports.scripts = {
 };
 
 exports.styles = {
-    'js-telephone-input': ['./src/styles/js-telephone-input.css']
+    'js-telephone-input': ['./src/styles/js-telephone-input.scss']
 };
 
 exports.images = {

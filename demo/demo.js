@@ -1,5 +1,9 @@
 window.onload = function () {
     initializeComponent();
+
+    //Button event
+    var saveButton = document.getElementById('saveParameters');
+    saveButton.onclick = function() {changeParameters()};
 };
 
 function initializeComponent() {
@@ -11,7 +15,7 @@ function initializeComponent() {
             'invalidDefaultNumber': 'El teléfono cargado en tu cuenta no es válido. Verifícalo por favor.',
             'max': 'Este teléfono excede el máximo de dígitos posible.',
             'numbers': 'Sólo puedes ingresar números.',
-            'possible': 'El teléfono es posiblemente correcto.',
+            'possible': 'Revisa tu teléfono.',
             'notANumber': 'El teléfono no es un número.',
             'zero': 'Ingrésalo siguiendo el formato de este ejemplo: ##example##'
         },
@@ -24,7 +28,7 @@ function initializeComponent() {
 
     //Initialize component
     var telephoneInput = document.getElementById('telephone');
-    telephoneInputMask(telephoneInput, parameters);
+    jsTelephoneInput(telephoneInput, parameters);
 }
 
 function changeParameters() {

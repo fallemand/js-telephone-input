@@ -9,46 +9,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="https://http2.mlstatic.com/secure/org-img/ch/ui/1.1.1/chico.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="demo.css">
+
+    <!-- Load Library JS -->
     <link rel="stylesheet" href="../ui-build/css/js-telephone-input.css">
+
+    <!-- Only for demo purpose -->
+    <link rel="stylesheet" href="demo.css">
     <link href='https://fonts.googleapis.com/css?family=Lato:400,300,100,700' rel='stylesheet' type='text/css'>
 
     <!--[if lt IE 9]>
-            <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-            <script>window.html5 || document.write('<script src="js/vendor/html5shiv.js"><\/script>')</script>
-        <![endif]-->
+        <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <script>window.html5 || document.write('<script src="js/vendor/html5shiv.js"><\/script>')</script>
+    <![endif]-->
 </head>
 
 <body>
-    <div class="ch-box-lite">
-        <h1>Parámetros</h1>
+    <section class="ch-box-lite">
+        <h2 class="title">Parámetros</h2>
         <span class="result">País: </span> <select id="country"><option>ar</option><option selected>mx</option></select> <br />
-        <span class="result">Usar Bandera: </span> <select id="withFlag"><option>Si</option><option selected>No</option></select> <br />
-        <span class="result">Cambiar Bandera: </span> <select id="canChangeCountry"><option>Si</option><option selected>No</option></select> <br />
+        <span class="result">Usar Bandera: </span> <select id="withFlag"><option selected>Si</option><option>No</option></select> <br />
+        <span class="result">Cambiar Bandera: </span> <select id="canChangeCountry"><option selected>Si</option><option>No</option></select> <br />
         <span class="result">Requerido: </span> <select id="required"><option selected>Si</option><option>No</option></select> <br />
-        <span class="result">Valor Inicial: </span> <input class="initial-value" id="initialValue"></input> <br />
-        <button class="ch-btn ch-btn-small" onclick="changeParameters()">Guardar</button>
-    </div>
+        <span class="result">Valor Inicial: </span> <input class="initial-value" id="initialValue" /> <br />
+        <button id="saveParameters" class="ch-btn ch-btn-small">Guardar</button>
+    </section>
 
-    <div class="ch-box-lite">
-        <h1>Telephone Input</h1>
+    <section class="ch-box-lite">
+        <h2 class="title">Telephone Input</h2>
         <form>
             <div id="tel" class="tel">
                 <div class="tel-number">
-                    <input id="telephone" required type="text" data-value="" data-validations="tel-validations" data-country="ar" data-areaCode="telephoneAreaCode" data-number="telephoneNumber" />
+                    <input id="telephone" required type="text" data-value="" data-validations="tel-validations" data-country="mx" data-areaCode="telephoneAreaCode" data-number="telephoneNumber" data-fullNumber="telephoneFullNumber" />
                 </div>
                 <div id="tel-validations" class="tel-validations"></div>
             </div>
         </form>
-    </div>
+    </section>
 
-    <div class="ch-box-lite">
-        <h2>Resultado</h2>
+    <section class="ch-box-lite">
+        <h2 class="title">Resultado</h2>
         <span class="result">Código Área: </span> <input id="telephoneAreaCode" type="text" name="sellerContact.areaCode" /> <br />
-        <span class="result">Teléfono: </span> <input id="telephoneNumber" type="text" name="sellerContact.phone" />
-    </div>
+        <span class="result">Teléfono: </span> <input id="telephoneNumber" type="text" name="sellerContact.phone" /> <br />
+        <span class="result">Tel Completo : </span> <input id="telephoneFullNumber" type="text" name="sellerContact.fullPhone" />
+    </section>
 
+    <!-- Load Library JS -->
     <script src="../ui-build/js/js-telephone-input.js"></script>
+
+    <!-- Only for demo purpose -->
     <script src="demo.js"></script>
 </body>
 

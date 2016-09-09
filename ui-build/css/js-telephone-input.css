@@ -16,6 +16,7 @@
   border: 1px solid #ccc !important;
   letter-spacing: .5px;
   padding: 6px !important;
+  padding-left: 10px !important;
   padding-right: 23px !important;
   height: 16px;
   width: 120px; }
@@ -116,7 +117,7 @@
   margin: 5px 0; }
 
 .tel-with-flag .tel-number {
-  margin-left: -2px; }
+  margin-left: -3px; }
 
 .tel-with-flag .tel-number input {
   border-left: 1px; }
@@ -132,7 +133,9 @@
   opacity: 0;
   height: 0;
   width: 0;
+  max-height: 190px;
   overflow: hidden;
+  overflow-y: auto;
   margin: 1px 0 0 0; }
 
 .tel-flags-list.show {
@@ -166,8 +169,10 @@
 .tel-flags-list {
   position: absolute;
   background-color: #f9f9f9;
-  min-width: 160px;
+  min-width: 195px;
   font-size: 12px;
+  margin-top: 2px;
+  border-top: 1px solid #efefef;
   padding: 0;
   -webkit-box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
           box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2); }
@@ -176,7 +181,7 @@
 .tel-flags-list-item {
   color: black;
   text-align: left;
-  padding: 7px 10px;
+  padding: 6px 2px 6px 10px;
   text-decoration: none;
   display: block; }
 
