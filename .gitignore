@@ -1,2 +1,5 @@
+node_modules
+reports
+.DS_Store
+*.log
 .idea
-node-modules/
