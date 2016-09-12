@@ -28,7 +28,8 @@ function initializeComponent() {
 
     //Initialize component
     var telephoneInput = document.getElementById('telephone');
-    jsTelephoneInput(telephoneInput, parameters);
+    telephoneInput = new jsTelephoneInput(telephoneInput, parameters);
+    console.log(telephoneInput.isValid());
 }
 
 function changeParameters() {

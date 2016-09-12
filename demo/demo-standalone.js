@@ -13,7 +13,6 @@ window.onload = function () {
         parameters = {
             required: true,
             withFlag: true,
-            completeMask: false,
             messages: messages
         };
 
