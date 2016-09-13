@@ -3,15 +3,20 @@
 -------------------------------------------------------- */
 
 body {
-    max-width: 400px;
     margin: 50px auto;
     background-color: #eee;
     color: #888;
     font-family: 'Lato', sans-serif;
     font-weight: 300;
+    max-width: 950px;
 }
 
-.ch-box-lite {
+.demo {
+    max-width: 350px;
+    display: inline-block;
+}
+
+.demo .ch-box-lite {
     padding: 15px 20px;
     background-color: #fff;
     border: 1px solid #ccc;
@@ -20,6 +25,19 @@ body {
     -moz-box-shadow: 0 0 7px 0 rgba(0,0,0,.2);
     box-shadow: 0 0 7px 0 rgba(0,0,0,.2);
 }
+
+.documentation {
+    margin-left: 20px;
+    width: 550px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.documentation .ch-box-lite {
+    padding: 15px 20px;
+}
+
+
 
 .ch-box-lite .ch-btn {
     margin-top: 5px;

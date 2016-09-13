@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="">
+<html class="no-js" lang="es">
 
 <head>
     <meta charset="utf-8">
@@ -10,7 +10,7 @@
 
     <link href="https://http2.mlstatic.com/secure/org-img/ch/ui/1.1.1/chico.min.css" rel="stylesheet" type="text/css">
 
-    <!-- Load Library JS -->
+    <!-- Load Library CSS -->
     <link rel="stylesheet" href="../ui-build/css/js-telephone-input.css">
 
     <!-- Only for demo purpose -->
@@ -24,33 +24,49 @@
 </head>
 
 <body>
-    <section class="ch-box-lite">
-        <h2 class="title">Parámetros</h2>
-        <span class="result">País: </span> <select id="country"><option>ar</option><option selected>mx</option></select> <br />
-        <span class="result">Usar Bandera: </span> <select id="withFlag"><option selected>Si</option><option>No</option></select> <br />
-        <span class="result">Cambiar Bandera: </span> <select id="canChangeCountry"><option selected>Si</option><option>No</option></select> <br />
-        <span class="result">Requerido: </span> <select id="required"><option selected>Si</option><option>No</option></select> <br />
-        <span class="result">Valor Inicial: </span> <input class="initial-value" id="initialValue" /> <br />
-        <button id="saveParameters" class="ch-btn ch-btn-small">Guardar</button>
-    </section>
+    <section class="demo">
 
-    <section class="ch-box-lite">
-        <h2 class="title">Telephone Input</h2>
-        <form>
-            <div id="tel" class="tel">
-                <div class="tel-number">
-                    <input id="telephone" required type="text" data-value="" data-validations="tel-validations" data-country="mx" data-areaCode="telephoneAreaCode" data-number="telephoneNumber" data-fullNumber="telephoneFullNumber" />
+        <section class="ch-box-lite">
+            <h2 class="title">Parámetros</h2>
+            <span class="result">País: </span> <select id="country"></select> <br />
+            <span class="result">Usar Bandera: </span> <select id="withFlag"><option selected>Si</option><option>No</option></select> <br />
+            <span class="result">Cambiar Bandera: </span> <select id="canChangeCountry"><option selected>Si</option><option>No</option></select> <br />
+            <span class="result">Requerido: </span> <select id="required"><option selected>Si</option><option>No</option></select> <br />
+            <span class="result">Valor Inicial: </span> <input class="initial-value" id="initialValue" /> <br />
+            <button id="saveParameters" class="ch-btn ch-btn-small">Guardar</button>
+        </section>
+
+        <section class="ch-box-lite">
+            <h2 class="title">Telephone Input</h2>
+            <form>
+                <div id="tel" class="tel">
+                    <div class="tel-number">
+                        <input id="telephone" required type="text" value="" data-validations="tel-validations" data-country="mx" data-areaCode="telephoneAreaCode" data-number="telephoneNumber" data-fullNumber="telephoneFullNumber" />
+                    </div>
+                    <div id="tel-validations" class="tel-validations"></div>
                 </div>
-                <div id="tel-validations" class="tel-validations"></div>
-            </div>
-        </form>
+            </form>
+        </section>
+
+        <section class="ch-box-lite">
+            <h2 class="title">Resultado</h2>
+            <span class="result">Código Área: </span> <input id="telephoneAreaCode" type="text" name="sellerContact.areaCode" /> <br />
+            <span class="result">Teléfono: </span> <input id="telephoneNumber" type="text" name="sellerContact.phone" /> <br />
+            <span class="result">Tel Completo : </span> <input id="telephoneFullNumber" type="text" name="sellerContact.fullPhone" />
+        </section>
+
     </section>
 
-    <section class="ch-box-lite">
-        <h2 class="title">Resultado</h2>
-        <span class="result">Código Área: </span> <input id="telephoneAreaCode" type="text" name="sellerContact.areaCode" /> <br />
-        <span class="result">Teléfono: </span> <input id="telephoneNumber" type="text" name="sellerContact.phone" /> <br />
-        <span class="result">Tel Completo : </span> <input id="telephoneFullNumber" type="text" name="sellerContact.fullPhone" />
+    <section class="documentation">
+        <div class="ch-box-lite">
+            <h1>jsTelephoneInput</h1>
+            <p>Vanilla JS library to validate international telephones</p>
+            <p><b>Dependency:</b> Google LibPhoneNumber</p>
+            <br />
+            <hr>
+            <br />
+            <h2>How to use it?</h2>
+        </div>
     </section>
 
     <!-- Load Library JS -->

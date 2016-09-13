@@ -1,9 +1,7 @@
 window.onload = function () {
     initializeComponent();
 
-    //Button event
-    var saveButton = document.getElementById('saveParameters');
-    saveButton.onclick = function() {changeParameters()};
+    initializeDemo();
 };
 
 function initializeComponent() {
@@ -29,7 +27,30 @@ function initializeComponent() {
     //Initialize component
     var telephoneInput = document.getElementById('telephone');
     telephoneInput = new jsTelephoneInput(telephoneInput, parameters);
+
+    //Call public methods
     console.log(telephoneInput.isValid());
+    console.log(telephoneInput.getTelephone());
+}
+
+function initializeDemo() {
+
+    //Fill select with countries
+    var countries = [
+        "ar","bo","br","cl","co","do","ec","sv","gt","hn","mx","ni","pa","py","pe","pt","uy","ve"
+    ];
+    var countrySelect = document.getElementById('country');
+
+    var option;
+    for(var country in countries) {
+        option = document.createElement('option');
+        option.innerText = countries[country];
+        countrySelect.appendChild(option);
+    }
+
+    //Button event
+    var saveButton = document.getElementById('saveParameters');
+    saveButton.onclick = function() {changeParameters()};
 }
 
 function changeParameters() {
