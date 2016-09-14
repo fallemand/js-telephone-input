@@ -175,10 +175,10 @@
                 'notANumber': 'El teléfono no es un número.',
                 'zero': 'Ingrésalo siguiendo el formato de este ejemplo: ##example##'
             },
-            validations : 'tel-validations',
-            areaCode : "telephoneAreaCode",
-            number : "telephoneNumber",
-            fullNumber : "telephoneFullNumber"
+            validations : 'telValidations',
+            areaCode : "telAreaCode",
+            number : "telNumber",
+            fullNumber : "telFullNumber"
         };
 
         //Checks parameters written as html attributes

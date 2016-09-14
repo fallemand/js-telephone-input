@@ -8,11 +8,11 @@ body {
     color: #888;
     font-family: 'Lato', sans-serif;
     font-weight: 300;
-    max-width: 950px;
+    max-width: 1050px;
 }
 
 .demo {
-    max-width: 350px;
+    width: 380px;
     display: inline-block;
 }
 
@@ -28,7 +28,9 @@ body {
 
 .documentation {
     margin-left: 20px;
-    width: 550px;
+    width: 620px;
+    height: 500px;
+    overflow-y: scroll;
     display: inline-block;
     vertical-align: top;
 }
@@ -49,7 +51,7 @@ body {
 
 .result {
     display: inline-block;
-    min-width: 120px;
+    width: 90px;
 }
 
 .initial-value {

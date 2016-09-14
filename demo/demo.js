@@ -18,9 +18,9 @@ function initializeComponent() {
             'zero': 'Ingrésalo siguiendo el formato de este ejemplo: ##example##'
         },
         parameters = {
-            required: (document.getElementById('required').value == 'Si'),
-            withFlag: (document.getElementById('withFlag').value == 'Si'),
-            canChangeCountry: (document.getElementById('canChangeCountry').value == 'Si'),
+            required: (document.getElementById('required').value == 'Yes'),
+            withFlag: (document.getElementById('withFlag').value == 'Yes'),
+            canChangeCountry: (document.getElementById('canChangeCountry').value == 'Yes'),
             messages: messages
         };
 

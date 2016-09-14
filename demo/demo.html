@@ -27,13 +27,13 @@
     <section class="demo">
 
         <section class="ch-box-lite">
-            <h2 class="title">Parámetros</h2>
-            <span class="result">País: </span> <select id="country"></select> <br />
-            <span class="result">Usar Bandera: </span> <select id="withFlag"><option selected>Si</option><option>No</option></select> <br />
-            <span class="result">Cambiar Bandera: </span> <select id="canChangeCountry"><option selected>Si</option><option>No</option></select> <br />
-            <span class="result">Requerido: </span> <select id="required"><option selected>Si</option><option>No</option></select> <br />
-            <span class="result">Valor Inicial: </span> <input class="initial-value" id="initialValue" /> <br />
-            <button id="saveParameters" class="ch-btn ch-btn-small">Guardar</button>
+            <h2 class="title">Parameters</h2>
+            <span class="result">Country: </span> <select id="country"></select> <br />
+            <span class="result">Show Flag: </span> <select id="withFlag"><option selected>Yes</option><option>No</option></select> <br />
+            <span class="result">Change Flag: </span> <select id="canChangeCountry"><option selected>Yes</option><option>No</option></select> <br />
+            <span class="result">Required: </span> <select id="required"><option selected>Yes</option><option>No</option></select> <br />
+            <span class="result">Initial Value: </span> <input class="initial-value" id="initialValue" /> <br />
+            <button id="saveParameters" class="ch-btn ch-btn-small">Refresh</button>
         </section>
 
         <section class="ch-box-lite">
@@ -49,10 +49,10 @@
         </section>
 
         <section class="ch-box-lite">
-            <h2 class="title">Resultado</h2>
-            <span class="result">Código Área: </span> <input id="telephoneAreaCode" type="text" name="sellerContact.areaCode" /> <br />
-            <span class="result">Teléfono: </span> <input id="telephoneNumber" type="text" name="sellerContact.phone" /> <br />
-            <span class="result">Tel Completo : </span> <input id="telephoneFullNumber" type="text" name="sellerContact.fullPhone" />
+            <h2 class="title">Result</h2>
+            <span class="result">Area Code: </span> <input id="telephoneAreaCode" type="text" name="sellerContact.areaCode" /> <br />
+            <span class="result">Phone: </span> <input id="telephoneNumber" type="text" name="sellerContact.phone" /> <br />
+            <span class="result">Full Phone: </span> <input id="telephoneFullNumber" type="text" name="sellerContact.fullPhone" />
         </section>
 
     </section>
@@ -60,12 +60,124 @@
     <section class="documentation">
         <div class="ch-box-lite">
             <h1>jsTelephoneInput</h1>
-            <p>Vanilla JS library to validate international telephones</p>
-            <p><b>Dependency:</b> Google LibPhoneNumber</p>
+            <p>Vanilla JS library to validate international telephones. It uses a precompiled and express version of the
+                <a href="https://github.com/googlei18n/libphonenumber">google's libphonenumber</a> called
+                <a href="https://github.com/grantila/awesome-phonenumber">awesome-phonenumber</a></p>
+            <p><b>Download:</b> <a href="https://github.com/fallemand/js-telephone-input" title="JsTelephoneInput">GitHub</a></p>
             <br />
             <hr>
             <br />
-            <h2>How to use it?</h2>
+            <h2>Basic Usage</h2>
+
+            <h4>1. Import Library</h4>
+            <pre class="prettyprint"><xmp>
+    <!-- Load Library CSS -->
+    <link rel="stylesheet" href="ui-dist/js-telephone-input.css" />
+    <!-- Load Library JS -->
+    <script src="ui-dist/js-telephone-input.js"></script>
+            </xmp></pre>
+
+            <h4>2. HTML Markup</h4>
+            <pre class="prettyprint"><xmp>
+    <div id="tel" class="tel">
+        <div class="tel-number">
+            <input id="telephone" type="text" />
+        </div>
+        <div id="telValidations" class="tel-validations"></div>
+    </div>
+            </xmp></pre>
+
+            <h4>3. Initialize Component</h4>
+            <pre class="prettyprint"><xmp>
+    //Define parameters
+    var parameters = {
+        required: true,
+        withFlag: true,
+        canChangeCountry: true,
+        country: 'ar'
+    };
+
+    //Initialize component
+    var telephoneInput = document.getElementById('telephone');
+    telephoneInput = new jsTelephoneInput(telephoneInput, parameters);
+
+    //Call method
+    console.log(telephoneInput.isValid());
+            </xmp></pre>
+            <br />
+            <hr>
+            <br />
+            <h2>Parameters</h2>
+            <table class="ch-datagrid" summary="Parameters List">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Default</th>
+                    <th scope="col">Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>required</td>
+                    <td><i>Boolean</i></td>
+                    <td>true</td>
+                    <td>If the value is required</td>
+                </tr>
+                <tr>
+                    <td>withFlag</td>
+                    <td><i>Boolean</i></td>
+                    <td>true</td>
+                    <td>Show the flag of the country</td>
+                </tr>
+                <tr>
+                    <td>canChangeCountry</td>
+                    <td><i>Boolean</i></td>
+                    <td>true</td>
+                    <td>Let the user change the country</td>
+                </tr>
+                <tr>
+                    <td>validations</td>
+                    <td><i>String</i></td>
+                    <td>'telValidations'</td>
+                    <td>Id of the div element where the validations will be shown</td>
+                </tr>
+                <tr>
+                    <td>areaCode</td>
+                    <td><i>String</i></td>
+                    <td>'telAreaCode'</td>
+                    <td>(Optional) Id of the hidden input where the area code value will be stored</td>
+                </tr>
+                <tr>
+                    <td>number</td>
+                    <td><i>String</i></td>
+                    <td>'telNumber'</td>
+                    <td>(Optional) Id of the hidden input where the telephone number value will be stored</td>
+                </tr>
+                <tr>
+                    <td>fullNumber</td>
+                    <td><i>String</i></td>
+                    <td>'telFullNumber'</td>
+                    <td>(Optional) Id of the hidden input where the full telephone value will be stored</td>
+                </tr>
+                <tr>
+                    <td>messages</td>
+                    <td><i>Json</i></td>
+                    <td><a href="messages.json" target="_blank">Check JSON</a></td>
+                    <td>List of validation messages</td>
+                </tr>
+                </tbody>
+            </table>
+            <br />
+            <hr>
+            <br />
+            <h2>Parameters as data attributes</h2>
+            <p>All the parameters can be passed as input attributes. Just add 'data-' before each parameter.</p>
+            <pre class="prettyprint"><xmp>
+    <input id="telephone" type="text" data-withFlag="true"
+       data-canChangeCountry="true" data-validations="telValidations"
+       data-areaCode="telAreaCode" data-number="telNumber" />
+            </xmp></pre>
         </div>
     </section>
 
@@ -74,6 +186,7 @@
 
     <!-- Only for demo purpose -->
     <script src="demo.js"></script>
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=sons-of-obsidian"></script>
 </body>
 
 </html>
