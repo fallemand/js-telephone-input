@@ -1,9 +1,7 @@
 window.onload = function () {
     initializeComponent();
 
-    //Button event
-    var saveButton = document.getElementById('saveParameters');
-    saveButton.onclick = function() {changeParameters()};
+    initializeDemo();
 };
 
 function initializeComponent() {
@@ -20,15 +18,39 @@ function initializeComponent() {
             'zero': 'Ingrésalo siguiendo el formato de este ejemplo: ##example##'
         },
         parameters = {
-            required: (document.getElementById('required').value == 'Si'),
-            withFlag: (document.getElementById('withFlag').value == 'Si'),
-            canChangeCountry: (document.getElementById('canChangeCountry').value == 'Si'),
+            required: (document.getElementById('required').value == 'Yes'),
+            withFlag: (document.getElementById('withFlag').value == 'Yes'),
+            canChangeCountry: (document.getElementById('canChangeCountry').value == 'Yes'),
             messages: messages
         };
 
     //Initialize component
     var telephoneInput = document.getElementById('telephone');
-    jsTelephoneInput(telephoneInput, parameters);
+    telephoneInput = new jsTelephoneInput(telephoneInput, parameters);
+
+    //Call public methods
+    console.log(telephoneInput.isValid());
+    console.log(telephoneInput.getTelephone());
+}
+
+function initializeDemo() {
+
+    //Fill select with countries
+    var countries = [
+        "ar","bo","br","cl","co","do","ec","sv","gt","hn","mx","ni","pa","py","pe","pt","uy","ve"
+    ];
+    var countrySelect = document.getElementById('country');
+
+    var option;
+    for(var country in countries) {
+        option = document.createElement('option');
+        option.innerText = countries[country];
+        countrySelect.appendChild(option);
+    }
+
+    //Button event
+    var saveButton = document.getElementById('saveParameters');
+    saveButton.onclick = function() {changeParameters()};
 }
 
 function changeParameters() {

@@ -1,67 +1,211 @@
-global.jsTelephoneInput = function(field, parameters) {
+(function() {
 
     'use strict';
 
-    /* Google's libphonenumber pre-compiled
-     More info: https://github.com/grantila/awesome-phonenumber */
-    var PhoneNumber = require('awesome-phonenumber');
+    //----------------------------------------------------
+    // Define our constructor
+    //----------------------------------------------------
+    global.jsTelephoneInput = function() {
 
-    /* Country List: Define here the countries you want to be visible */
-    var countriesList = require('./country-list');
-
-    //Check if parameters exists.
-    if(!field || !parameters) {
-        console.log('js-telephone-input: field or parameters are not defined');
-        return;
-    }
-
-    //Define attributes && state variables.
-    var country = (parameters.country) ? parameters.country : field.getAttribute('data-country').toLocaleLowerCase(),
-        codeAreaInput = (parameters.codeAreaInput) ? parameters.codeAreaInput : document.getElementById(field.getAttribute('data-areaCode')),
-        numberInput = (parameters.numberInput) ? parameters.numberInput : document.getElementById(field.getAttribute('data-number')),
-        fullNumberInput = (parameters.fullNumberInput) ? parameters.fullNumberInput : document.getElementById(field.getAttribute('data-fullNumber')),
-        classNames = {
-            inputErrorClass : ' tel-validations-input-error',
-            showClass : ' show'
-        },
-        validations = getValidations(),
-        elements = getElements(),
-        preventKeyup = false,
-        phoneNumber,
-        exampleNumber;
-
-    //Validate User Default Value
-    validateInitialValue();
-
-    //Define field events and attributes
-    addEvent(field, 'keyup', changed);
-    addEvent(field, 'click', changed);
-    addEvent(field, 'keypress', checkPressedKey);
-    addEvent(field, 'blur', setInputsValue);
-    setExampleNumber(country);
-
-    //Validate default telephone
-    function validateInitialValue() {
-        if(field.value.length > 0) {
-            changed();
-            if (!setInputsValue()) {
-                validations.show(validations.elements.invalidDefaultNumber, true, false);
-            }
-        }
-    }
-
-    // Principal event - Fired on keyup
-    function changed() {
-        if (preventKeyup) {
-            preventKeyup = false;
+        //Check if parameters exists.
+        if(!arguments[0] || !arguments[1] || typeof arguments[1] !== "object") {
+            console.log('js-telephone-input: field or parameters are not defined');
             return;
         }
-        phoneNumber = PhoneNumber(field.value, country);
-        var telephone = phoneNumber.getNumber('national');
-        if(telephone) {
-            field.value = telephone;
+
+        // Create global element references
+        this.LibPhoneNumber = require('awesome-phonenumber');
+        this.countriesList = require('./country-list');
+        this.field = arguments[0];
+        this.parameters = extendDefaults(arguments[1], this.field);
+        this.validations = getValidations(this);
+        this.elements = getElements(this);
+        this.preventKeyup = false;
+        this.phoneNumber = null;
+        this.exampleNumber = null;
+        this.classNames = {
+            inputErrorClass : ' tel-validations-input-error',
+            showClass : ' show'
+        };
+
+        //Validate User Default Value
+        validateInitialValue(this);
+
+        //Define field events and attributes
+        addEvent(this.field, 'keyup', format, this);
+        addEvent(this.field, 'click', format, this);
+        addEvent(this.field, 'keypress', checkPressedKey, this);
+        addEvent(this.field, 'blur', this.setInputsValue, this);
+        setExampleNumber(this.parameters.country, this);
+    };
+
+    //----------------------------------------------------
+    // Public Methods
+    //----------------------------------------------------
+
+    // Sets the value on the hidden inputs
+    jsTelephoneInput.prototype.setInputsValue = function(event, jsTelephoneInput) {
+        if(this instanceof global.jsTelephoneInput) {
+            jsTelephoneInput = this;
         }
-        validations.isValid();
+        var valid = jsTelephoneInput.isValid(),
+            telephone = jsTelephoneInput.getTelephone(),
+            numberInput = document.getElementById(jsTelephoneInput.parameters.number),
+            areaCodeInput = document.getElementById(jsTelephoneInput.parameters.areaCode),
+            fullNumberInput = document.getElementById(jsTelephoneInput.parameters.fullNumber);
+
+        if(numberInput) {
+            numberInput.value = (valid) ? telephone.telephone : '';
+        }
+        if(areaCodeInput) {
+            areaCodeInput.value = (valid) ? telephone.areaCode: '';
+        }
+        if(fullNumberInput) {
+            fullNumberInput.value = (valid) ? telephone.fullTelephone: '';
+        }
+
+        if (valid) {
+            jsTelephoneInput.validations.hide(jsTelephoneInput.validations.info.zero);
+            return true;
+        }
+        return false;
+    };
+
+    // Gets the telephone areaCode and number in json format
+    jsTelephoneInput.prototype.getTelephone = function() {
+        var areaCodeLimit = this.field.value.indexOf(' ');
+        //If the telephone does not contain spaces, cut the areaCode using the "-"
+        if(areaCodeLimit === -1) {
+            areaCodeLimit = this.field.value.indexOf('-');
+        }
+        else {
+            //If there are multiple spaces, use the first two parts as the areaCode.
+            if((this.field.value.match(/\s/g) || []).length > 2) {
+                areaCodeLimit = this.field.value.indexOf(' ', areaCodeLimit + 1);
+            }
+        }
+        return {
+            fullTelephone: stripValue(this.field.value).join(''),
+            areaCode: stripValue(this.field.value.substring(0, areaCodeLimit)).join(''),
+            telephone: stripValue(this.field.value.substring(areaCodeLimit + 1, this.field.value.length)).join('')
+        }
+    };
+
+    // Checks if the number is valid
+    jsTelephoneInput.prototype.isValid = function() {
+        if (this.field.value.length === 0) {
+            if(!this.parameters.required) {
+                return true;
+            }
+            return false;
+        }
+        return this.phoneNumber.isValid();
+    };
+
+    // Checks if the number is valid and shows the validations
+    jsTelephoneInput.prototype.validate = function() {
+        if (this.field.value.length === 0) {
+            this.validations.reset();
+            return;
+        }
+        if(this.isValid()) {
+            this.validations.show(this.validations.elements.valid, true, true);
+        }
+        else {
+            var reason = this.phoneNumber.toJSON().possibility;
+            if(reason) {
+                switch(reason) {
+                    case 'too-short' :
+                        this.validations.show(this.validations.elements.min, true, false);
+                        break;
+                    case 'too-long' :
+                        this.validations.show(this.validations.elements.max, true, false);
+                        break;
+                    case 'unknown' :
+                        //validations.show(validations.elements.notANumber, true, false);
+                        break;
+                    case 'is-possible' :
+                        this.validations.show(this.validations.elements.possible, true, false);
+                        break;
+                }
+                this.validations.show(this.validations.info.zero, false);
+                //syi.validationsFixer.fixValidationsPosition();
+            }
+        }
+    };
+
+    // Get an example number for the country
+    jsTelephoneInput.prototype.getExampleNumber = function(countryCode) {
+        return this.LibPhoneNumber.getExample(countryCode, 'fixed-line').getNumber('national');
+    };
+
+    //----------------------------------------------------
+    // Private Methods
+    //----------------------------------------------------
+
+    // Format the telephone and execute validations
+    function format(event, jsTelephoneInput) {
+        if (jsTelephoneInput.preventKeyup) {
+            jsTelephoneInput.preventKeyup = false;
+            return;
+        }
+        jsTelephoneInput.phoneNumber = jsTelephoneInput.LibPhoneNumber(jsTelephoneInput.field.value, jsTelephoneInput.parameters.country);
+        var telephone = jsTelephoneInput.phoneNumber.getNumber('national');
+        if(telephone) {
+            jsTelephoneInput.field.value = telephone;
+        }
+        jsTelephoneInput.validate();
+    }
+
+    // Mix default parameters with the user parameters
+    function extendDefaults(parameters, field) {
+        var defaults = {
+            country: 'ar',
+            required: true,
+            withFlag: true,
+            canChangeCountry: true,
+            messages: {
+                'required': 'Completa este dato.',
+                'valid': 'El teléfono es correcto.',
+                'min': 'Este teléfono tiene menos dígitos de los requeridos.',
+                'invalidDefaultNumber': 'El teléfono cargado en tu cuenta no es válido. Verifícalo por favor.',
+                'max': 'Este teléfono excede el máximo de dígitos posible.',
+                'numbers': 'Sólo puedes ingresar números.',
+                'possible': 'Revisa tu teléfono.',
+                'notANumber': 'El teléfono no es un número.',
+                'zero': 'Ingrésalo siguiendo el formato de este ejemplo: ##example##'
+            },
+            validations : 'telValidations',
+            areaCode : "telAreaCode",
+            number : "telNumber",
+            fullNumber : "telFullNumber"
+        };
+
+        //Checks parameters written as html attributes
+        for (var parameter in defaults) {
+            if(field.hasAttribute('data-' + parameter)) {
+                defaults[parameter] = field.getAttribute('data-' + parameter);
+            }
+        }
+
+        //Checks parameters sent as constructor parameters
+        for (var parameter in parameters) {
+            if (parameters.hasOwnProperty(parameter)) {
+                defaults[parameter] = parameters[parameter];
+            }
+        }
+
+        return defaults;
+    }
+
+    //Validate default telephone
+    function validateInitialValue(jsTelephoneInput) {
+        if(jsTelephoneInput.field.value.length > 0) {
+            format(undefined, jsTelephoneInput);
+            if (!jsTelephoneInput.setInputsValue()) {
+                jsTelephoneInput.validations.show(jsTelephoneInput.validations.elements.invalidDefaultNumber, true, false);
+            }
+        }
     }
 
     // Strips everything that's not a number
@@ -74,25 +218,25 @@ global.jsTelephoneInput = function(field, parameters) {
     }
 
     // Validates only number
-    function checkPressedKey(event) {
+    function checkPressedKey(event, jsTelephoneInput) {
         var charCode = (event.which) ? event.which : event.keyCode;
-        if (!isCharCodeNumber(charCode)) {
+        if (!isCharCodeANumber(charCode)) {
             event.preventDefault();
-            validations.show(validations.elements.numbers, true);
+            jsTelephoneInput.validations.show(jsTelephoneInput.validations.elements.numbers, true);
             highlightInput();
-            preventKeyup = true;
+            jsTelephoneInput.preventKeyup = true;
         }
 
         function highlightInput() {
-            if (!field.className || field.className.indexOf(classNames.inputErrorClass) === -1) {
-                field.className += classNames.inputErrorClass;
+            if (!jsTelephoneInput.field.className || jsTelephoneInput.field.className.indexOf(jsTelephoneInput.classNames.inputErrorClass) === -1) {
+                jsTelephoneInput.field.className += jsTelephoneInput.classNames.inputErrorClass;
                 setTimeout(function () {
-                    field.className = field.className.replace(classNames.inputErrorClass, '');
+                    jsTelephoneInput.field.className = jsTelephoneInput.field.className.replace(jsTelephoneInput.classNames.inputErrorClass, '');
                 }, 200);
             }
         }
 
-        function isCharCodeNumber(charCode) {
+        function isCharCodeANumber(charCode) {
             if (charCode > 31 && (charCode < 48 || charCode > 57)) {
                 return false;
             }
@@ -100,17 +244,12 @@ global.jsTelephoneInput = function(field, parameters) {
         }
     }
 
-    // Get an example number for the country
-    function getExampleNumber(countryCode) {
-        return PhoneNumber.getExample(countryCode, 'fixed-line').getNumber('national');
-    }
-
     // Define all the validations
-    function getValidations() {
+    function getValidations(jsTelephoneInput) {
 
         // Define elements
         var validations = {};
-        validations.parent = document.getElementById(field.getAttribute('data-validations'));
+        validations.parent = document.getElementById(jsTelephoneInput.parameters.validations);
         validations.elements = {
             valid: createValidation('valid', 'tel-validations-success tel-validations-valid'),
             possible: createValidation('possible', 'tel-validations-error tel-validations-possible'),
@@ -127,11 +266,11 @@ global.jsTelephoneInput = function(field, parameters) {
 
         // Define validations methods
         validations.reset = function (validationExcluded) {
-            elements.tel.className = elements.tel.className.replace(' tel-error', '').replace(' tel-success', '');
+            jsTelephoneInput.elements.tel.className = jsTelephoneInput.elements.tel.className.replace(' tel-error', '').replace(' tel-success', '');
             for (var type in validations.elements) {
                 if (validations.elements.hasOwnProperty(type)) {
                     if (validationExcluded !== validations.elements[type]) {
-                        validations.elements[type].className = validations.elements[type].className.replace(classNames.showClass, '');
+                        validations.elements[type].className = validations.elements[type].className.replace(jsTelephoneInput.classNames.showClass, '');
                     }
                 }
             }
@@ -144,52 +283,18 @@ global.jsTelephoneInput = function(field, parameters) {
             }
             if (isValid !== undefined) {
                 var telClass = (isValid) ? ' tel-success' : ' tel-error';
-                if (elements.tel.className.indexOf(telClass) === -1) {
-                    elements.tel.className += telClass;
+                if (jsTelephoneInput.elements.tel.className.indexOf(telClass) === -1) {
+                    jsTelephoneInput.elements.tel.className += telClass;
                 }
             }
-            validations.parent.className += (validations.parent.className.indexOf(classNames.showClass) === -1) ? classNames.showClass : '';
-            validation.className += (validation.className.indexOf(classNames.showClass) === -1) ? classNames.showClass : '';
+            validations.parent.className += (validations.parent.className.indexOf(jsTelephoneInput.classNames.showClass) === -1) ? jsTelephoneInput.classNames.showClass : '';
+            validation.className += (validation.className.indexOf(jsTelephoneInput.classNames.showClass) === -1) ? jsTelephoneInput.classNames.showClass : '';
         };
 
         //Hide a specific validation
         validations.hide = function (validation) {
-            validation.className = validation.className.replace(classNames.showClass, '');
+            validation.className = validation.className.replace(jsTelephoneInput.classNames.showClass, '');
             //syi.validationsFixer.fixValidationsPosition();
-        };
-
-        // Checks if the number is valid and shows the validations
-        validations.isValid = function () {
-            if (field.value.length === 0) {
-                validations.reset();
-                if(!parameters.required) {
-                    return true;
-                }
-                return false;
-            }
-            if(phoneNumber.isValid()) {
-                validations.show(validations.elements.valid, true, true);
-                return true;
-            }
-            if(phoneNumber.toJSON().possibility) {
-                switch(phoneNumber.toJSON().possibility) {
-                    case 'too-short' :
-                        validations.show(validations.elements.min, true, false);
-                        break;
-                    case 'too-long' :
-                        validations.show(validations.elements.max, true, false);
-                        break;
-                    case 'unknown' :
-                        //validations.show(validations.elements.notANumber, true, false);
-                        break;
-                    case 'is-possible' :
-                        validations.show(validations.elements.possible, true, false);
-                        break;
-                }
-                validations.show(validations.info.zero, false);
-                //syi.validationsFixer.fixValidationsPosition();
-            }
-            return false;
         };
 
         // Replaces the validations message with a specific variable
@@ -201,7 +306,7 @@ global.jsTelephoneInput = function(field, parameters) {
 
             function getTextToRepalce(variable) {
                 switch(variable) {
-                    case 'example' : return getExampleNumber(country)
+                    case 'example' : return jsTelephoneInput.getExampleNumber(jsTelephoneInput.parameters.country)
                 }
             }
         }
@@ -210,7 +315,7 @@ global.jsTelephoneInput = function(field, parameters) {
         function createValidation(name, className, replaceTemplate) {
             var validation = document.createElement('span');
             validation.className = className;
-            validation.innerHTML = parameters.messages[name];
+            validation.innerHTML = jsTelephoneInput.parameters.messages[name];
             if (replaceTemplate) {
                 replaceTemplates(validation);
             }
@@ -221,54 +326,13 @@ global.jsTelephoneInput = function(field, parameters) {
         return validations;
     }
 
-    // Sets the value on the hidden inputs
-    function setInputsValue() {
-        if (validations.isValid()) {
-            validations.hide(validations.info.zero);
-            var telephone = getTelephone();
-            if(numberInput) {
-                numberInput.value = telephone.telephone;
-            }
-            if(codeAreaInput) {
-                codeAreaInput.value = telephone.areaCode;
-            }
-            if(fullNumberInput) {
-                fullNumberInput.value = telephone.fullTelephone;
-            }
-            return true;
-        }
-        numberInput.value = '';
-        codeAreaInput.value = '';
-        return false;
-    }
-
-    // Gets the telephone area code and number
-    function getTelephone() {
-        var areaCodeLimit = field.value.indexOf(' ');
-        //If the telephone does not contain spaces, cut the areaCode using the "-"
-        if(areaCodeLimit === -1) {
-            areaCodeLimit = field.value.indexOf('-');
-        }
-        else {
-            //If there are multiple spaces, use the first two parts as the areaCode.
-            if((field.value.match(/\s/g) || []).length > 2) {
-                areaCodeLimit = field.value.indexOf(' ', areaCodeLimit + 1);
-            }
-        }
-        return {
-            fullTelephone: stripValue(field.value).join(''),
-            areaCode: stripValue(field.value.substring(0, areaCodeLimit)).join(''),
-            telephone: stripValue(field.value.substring(areaCodeLimit + 1, field.value.length)).join('')
-        }
-    }
-
     // Creates sub components (Country list menu)
-    function getElements() {
+    function getElements(jsTelephoneInput) {
         var elements = {};
-        elements.tel = findAncestor(field, 'tel');
-        elements.telNumber = findAncestor(field, 'tel-number');
+        elements.tel = findAncestor(jsTelephoneInput.field, 'tel');
+        elements.telNumber = findAncestor(jsTelephoneInput.field, 'tel-number');
 
-        if (parameters.withFlag) {
+        if (jsTelephoneInput.parameters.withFlag) {
             elements.tel.className += ' tel-with-flag';
             elements.telFlags = document.createElement('div');
             elements.telFlags.className = 'tel-flags';
@@ -278,7 +342,7 @@ global.jsTelephoneInput = function(field, parameters) {
             elements.telFlags.appendChild(elements.telFlagsSelected);
             setDefaultCountry(elements);
 
-            if (parameters.canChangeCountry) {
+            if (jsTelephoneInput.parameters.canChangeCountry) {
                 elements.telFlagsList = document.createElement('ul');
                 elements.telFlagsList.className = 'tel-flags-list';
                 elements.telFlags.appendChild(elements.telFlagsList);
@@ -297,13 +361,13 @@ global.jsTelephoneInput = function(field, parameters) {
 
         // Creates list of countries
         function createCountriesList(elements) {
-            for (var i = 0; i < countriesList.length; i += 1) {
+            for (var i = 0; i < jsTelephoneInput.countriesList.length; i += 1) {
                 var listItem = document.createElement('li');
                 var attrCountryCode = document.createAttribute("data-country");
-                attrCountryCode.value = countriesList[i][1];
+                attrCountryCode.value = jsTelephoneInput.countriesList[i][1];
                 listItem.setAttributeNode(attrCountryCode);
                 listItem.className = 'tel-flags-list-item';
-                listItem.innerHTML = '<div class="tel-flags-list-item-flag ' + countriesList[i][1] + '"></div><span class="tel-flags-list-item-name">' + countriesList[i][0] + '</span><span class="tel-flags-list-item-code">' + countriesList[i][2] + '</span>';
+                listItem.innerHTML = '<div class="tel-flags-list-item-flag ' + jsTelephoneInput.countriesList[i][1] + '"></div><span class="tel-flags-list-item-name">' + jsTelephoneInput.countriesList[i][0] + '</span><span class="tel-flags-list-item-code">' + jsTelephoneInput.countriesList[i][2] + '</span>';
                 elements.telFlagsList.appendChild(listItem);
             }
         }
@@ -311,18 +375,23 @@ global.jsTelephoneInput = function(field, parameters) {
         // Creates events of the component
         function createEvents(elements) {
 
+            var hideCountryListHandler;
+
             function showCountryList() {
                 if (elements.telFlagsList.className.indexOf('show') > -1) {
                     elements.telFlagsList.className = elements.telFlagsList.className.replace(' show', '');
                 } else {
                     elements.telFlagsList.className = 'tel-flags-list show';
+                    hideCountryListHandler = addEvent(document, 'mouseup', hideCountryList);
                 }
             }
 
             function hideCountryList(event, force) {
                 if ((event && event.target.className.indexOf('tel-flags') === -1) || force) {
                     elements.telFlagsList.className = elements.telFlagsList.className.replace(' show', '');
+
                 }
+                removeEvent(document, 'mouseup', hideCountryListHandler);
             }
 
             function changeSelectedCountry(event) {
@@ -330,53 +399,63 @@ global.jsTelephoneInput = function(field, parameters) {
                 if(!newCountry) {
                     newCountry = event.target.parentNode.getAttribute('data-country');
                 }
-                changeSelectedFlag(country, newCountry);
+                changeSelectedFlag(jsTelephoneInput.parameters.country, newCountry);
                 hideCountryList(false, true);
                 changeInfoExample();
-                setExampleNumber(newCountry);
-                field.value = "";
-                setInputsValue();
-                validations.reset();
+                setExampleNumber(newCountry, jsTelephoneInput);
+                jsTelephoneInput.field.value = "";
+                jsTelephoneInput.setInputsValue();
+                jsTelephoneInput.validations.reset();
 
                 function changeSelectedFlag(actualCountryCode, newCountryCode) {
                     var flagDiv = elements.telFlagsSelected.firstChild;
                     flagDiv.className = flagDiv.className.replace(' ' + actualCountryCode, '') + ' ' + newCountryCode;
-                    country = newCountryCode;
+                    jsTelephoneInput.parameters.country = newCountryCode;
                 }
 
                 function changeInfoExample() {
-                    validations.info.zero.innerHTML = validations.info.zero.innerHTML.replace(exampleNumber, getExampleNumber(country));
+                    jsTelephoneInput.validations.info.zero.innerHTML = jsTelephoneInput.validations.info.zero.innerHTML.replace(jsTelephoneInput.exampleNumber, jsTelephoneInput.getExampleNumber(jsTelephoneInput.parameters.country));
                 }
             }
 
             elements.telFlagsSelected.onclick = showCountryList;
-            addEvent(document, 'mouseup', hideCountryList);
             addEvent(elements.telFlagsList, 'click', changeSelectedCountry);
         }
 
         // Sets the default country
         function setDefaultCountry(elements) {
-            elements.telFlagsSelected.innerHTML = '<div class="tel-flags-list-item-flag ' + country + '"></div>'
+            elements.telFlagsSelected.innerHTML = '<div class="tel-flags-list-item-flag ' + jsTelephoneInput.parameters.country + '"></div>'
         }
     }
 
     // Add events with ie8 fallback
-    function addEvent(element, event, funct) {
+    function addEvent(element, event, funct, jsTelephoneInput) {
+        var handler = function(e) {
+            funct(e, jsTelephoneInput)
+        };
         if (element.addEventListener) {
-            element.addEventListener(event, function (event) {
-                funct(event);
-            }, false);
+            element.addEventListener(event, handler, false);
         } else {
-            element.attachEvent('on' + event, function (event) {
-                funct(event);
-            });
+            element.attachEvent('on' + event, handler);
+        }
+        return handler;
+    }
+
+    // remove events with ie8 fallback
+    function removeEvent(element, event, handler) {
+        if (element.removeEventListener) {
+            element.removeEventListener(event, handler);
+        }
+        if (element.detachEvent) {
+            element.detachEvent('on' + event, handler);
         }
     }
 
     // Sets the input's placeholder and the info message
-    function setExampleNumber(countryCode) {
-        var newExampleNumber = getExampleNumber(countryCode);
-        field.setAttribute('placeholder', newExampleNumber);
-        exampleNumber = newExampleNumber;
+    function setExampleNumber(countryCode, jsTelephoneInput) {
+        var newExampleNumber = jsTelephoneInput.getExampleNumber(countryCode);
+        jsTelephoneInput.field.setAttribute('placeholder', newExampleNumber);
+        jsTelephoneInput.exampleNumber = newExampleNumber;
     }
-};
+
+}());

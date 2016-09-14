@@ -13,12 +13,19 @@ window.onload = function () {
         parameters = {
             required: true,
             withFlag: true,
-            completeMask: false,
-            messages: messages
+            country: 'ar',
+            messages: messages,
+            validations : 'tel-validations',
+            areaCode : "telephoneAreaCode",
+            number : "telephoneNumber",
+            fullNumber : "telephoneFullNumber"
         };
 
     var telephoneInput = document.getElementById('telephone');
 
     //Initialize component
-    telephoneInputMask(telephoneInput, parameters);
+    telephoneInput = new jsTelephoneInput(telephoneInput, parameters);
+
+    //Call method
+    console.log(telephoneInput.isValid());
 };
