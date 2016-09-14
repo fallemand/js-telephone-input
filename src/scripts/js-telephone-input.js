@@ -85,6 +85,8 @@
             }
         }
         return {
+            country: this.parameters.country,
+            countryCode: this.LibPhoneNumber.getCountryCodeForRegionCode(this.parameters.country),
             fullTelephone: stripValue(this.field.value).join(''),
             areaCode: stripValue(this.field.value.substring(0, areaCodeLimit)).join(''),
             telephone: stripValue(this.field.value.substring(areaCodeLimit + 1, this.field.value.length)).join('')
@@ -183,7 +185,7 @@
 
         //Checks parameters written as html attributes
         for (var parameter in defaults) {
-            if(field.hasAttribute('data-' + parameter)) {
+            if(field.hasAttribute('data-' + camelCaseToDashCase(parameter))) {
                 defaults[parameter] = field.getAttribute('data-' + parameter);
             }
         }
@@ -456,6 +458,11 @@
         var newExampleNumber = jsTelephoneInput.getExampleNumber(countryCode);
         jsTelephoneInput.field.setAttribute('placeholder', newExampleNumber);
         jsTelephoneInput.exampleNumber = newExampleNumber;
+    }
+
+    // Transforms camelCaseAttributes to dash-case-attributes
+    function camelCaseToDashCase(string) {
+        return string.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase();
     }
 
 }());
