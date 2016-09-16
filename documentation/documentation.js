@@ -28,9 +28,6 @@ function initializeComponent() {
     var telephoneInput = document.getElementById('telephone');
     telephoneInput = new jsTelephoneInput(telephoneInput, parameters);
 
-    //Call public methods
-    console.log(telephoneInput.isValid());
-    console.log(telephoneInput.getTelephone());
 }
 
 function initializeDemo() {
@@ -55,17 +52,17 @@ function initializeDemo() {
 
 function changeParameters() {
     var initialValue = document.getElementById('initialValue').value;
-    var tel = document.getElementById('tel');
-    tel.className = 'tel';
+    var tel = document.getElementById('demo-telephone');
+    tel.className = 'ui-telephone';
     var telNumber = document.createElement('div');
-    telNumber.className = 'tel-number';
-    telNumber.innerHTML = '<input id="telephone" required type="text" value="' + initialValue + '" data-validations="tel-validations" data-country="' + document.getElementById('country').value + '" data-areaCode="telephoneAreaCode" data-number="telephoneNumber" />';
+    telNumber.className = 'ui-telephone__number';
+    telNumber.innerHTML = '<input id="telephone" type="text" value="' + initialValue + '" data-validations="tel-validations" data-country="' + document.getElementById('country').value + '" data-area-code="telephoneAreaCode" data-full-number="telephoneFullNumber" data-number="telephoneNumber" />';
     var telValidations = document.createElement('div');
     telValidations.id = 'tel-validations';
-    telValidations.className = 'tel-validations';
+    telValidations.className = 'ui-telephone__validations';
     tel.innerHTML = '';
     tel.appendChild(telNumber);
     tel.appendChild(telValidations);
 
-    initializeComponent()
+    initializeComponent();
 }
