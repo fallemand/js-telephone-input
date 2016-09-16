@@ -1,3 +1,15 @@
+.ui-telephone__flag-icon {
+  width: 20px;
+  height: 15px;
+  vertical-align: text-top;
+  display: inline-block;
+  -webkit-box-shadow: 0 0 1px 0 #888;
+          box-shadow: 0 0 1px 0 #888;
+  background-image: url("../images/flags.png");
+  background-repeat: no-repeat;
+  background-color: #DBDBDB;
+  background-position: 20px 0; }
+
 @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 144dpi), (min-resolution: 1.5dppx) {
   .ui-telephone__flag-icon {
     -webkit-background-size: 5630px 15px;
@@ -798,6 +810,44 @@
 .ui-telephone {
   display: inline-block; }
 
+.ui-telephone--with-flag .ui-telephone__number {
+  margin-left: -3px; }
+  .ui-telephone--with-flag .ui-telephone__number input {
+    border-left: 1px; }
+
+.ui-telephone--success .ui-telephone__flags,
+.ui-telephone--success .ui-telephone__number input,
+.ui-telephone--success .ui-telephone__number input:hover,
+.ui-telephone--success .ui-telephone__number input:focus {
+  border: solid 1px #C7DBC8 !important;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important; }
+
+.ui-telephone--success .ui-telephone__number:after {
+  background-position: -17px 0; }
+
+.ui-telephone--error .ui-telephone__flags,
+.ui-telephone--error .ui-telephone__number input,
+.ui-telephone--error .ui-telephone__number input:hover,
+.ui-telephone--error .ui-telephone__number input:focus {
+  border: solid 1px #EAC9C8 !important;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important; }
+
+.ui-telephone--success .ui-telephone__number:after,
+.ui-telephone--error .ui-telephone__number:after {
+  top: 50%;
+  right: 4px;
+  border: 4px solid transparent;
+  content: "";
+  height: 16px;
+  margin-top: -12px;
+  width: 14px;
+  position: absolute;
+  background-image: url("../images/sprite-icons-validate.png");
+  background-position: 0 0;
+  background-repeat: no-repeat; }
+
 .ui-telephone__flags {
   border: solid 1px #ccc;
   -webkit-box-shadow: none;
@@ -813,6 +863,10 @@
     padding-right: 23px !important;
     height: 16px;
     width: 120px; }
+
+.ui-telephone__number,
+.ui-telephone__flags {
+  display: inline-block; }
 
 /* Validations
 -------------------------------------------------------- */
@@ -836,14 +890,17 @@
     padding: 0;
     margin: 0; }
     .ui-telephone__validations .zero.is-visible {
-      position: relative; }
-
-.ui-telephone__validations.is-visible,
-.ui-telephone__validations .zero.is-visible {
-  opacity: 1;
-  padding: 0 0 3px;
-  height: auto;
-  line-height: 1.4; }
+      position: relative;
+      opacity: 1;
+      padding: 0 0 3px;
+      height: auto;
+      line-height: 1.4; }
+  .ui-telephone__validations.is-visible {
+    position: relative;
+    opacity: 1;
+    padding: 0 0 3px;
+    height: auto;
+    line-height: 1.4; }
 
 .ui-telephone__input-error {
   background-color: #eac8C8;
@@ -862,39 +919,6 @@
 .ui-telephone__validation--error {
   color: #CC6C52; }
 
-.ui-telephone--error .ui-telephone__flags,
-.ui-telephone--error .ui-telephone__number input,
-.ui-telephone--error .ui-telephone__number input:hover,
-.ui-telephone--error .ui-telephone__number input:focus {
-  border: solid 1px #EAC9C8 !important;
-  -webkit-box-shadow: none !important;
-          box-shadow: none !important; }
-
-.ui-telephone--success .ui-telephone__flags,
-.ui-telephone--success .ui-telephone__number input,
-.ui-telephone--success .ui-telephone__number input:hover,
-.ui-telephone--success .ui-telephone__number input:focus {
-  border: solid 1px #C7DBC8 !important;
-  -webkit-box-shadow: none !important;
-          box-shadow: none !important; }
-
-.ui-telephone--success .ui-telephone__number:after,
-.ui-telephone--error .ui-telephone__number:after {
-  top: 50%;
-  right: 4px;
-  border: 4px solid transparent;
-  content: "";
-  height: 16px;
-  margin-top: -12px;
-  width: 14px;
-  position: absolute;
-  background-image: url("../images/sprite-icons-validate.png");
-  background-position: 0 0;
-  background-repeat: no-repeat; }
-
-.ui-telephone--success .ui-telephone__number:after {
-  background-position: -17px 0; }
-
 /* Flags
 -------------------------------------------------------- */
 .ui-telephone__flags {
@@ -904,11 +928,6 @@
   border: 1px solid #ccc;
   border-right: none;
   margin: 5px 0; }
-
-.ui-telephone--with-flag .ui-telephone__number {
-  margin-left: -3px; }
-  .ui-telephone--with-flag .ui-telephone__number input {
-    border-left: 1px; }
 
 .ui-telephone__flags--can-change {
   padding-right: 5px;
@@ -936,7 +955,14 @@
   max-height: 190px;
   overflow: hidden;
   overflow-y: auto;
-  margin: 1px 0 0 0; }
+  margin: 1px 0 0 0;
+  background-color: #f9f9f9;
+  min-width: 195px;
+  font-size: 12px;
+  border-top: 1px solid #efefef;
+  padding: 0;
+  -webkit-box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2); }
   .ui-telephone__flags-list.is-visible {
     opacity: 1;
     height: auto;
@@ -950,17 +976,6 @@
   padding: 5px;
   padding-right: 6px;
   text-align: center; }
-
-.ui-telephone__flags-list {
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 195px;
-  font-size: 12px;
-  margin-top: 2px;
-  border-top: 1px solid #efefef;
-  padding: 0;
-  -webkit-box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-          box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2); }
 
 .ui-telephone__flags-list-item {
   color: black;
@@ -976,19 +991,3 @@
 
 .ui-telephone__flag-code {
   color: #999; }
-
-.ui-telephone__flag-icon {
-  width: 20px;
-  height: 15px;
-  vertical-align: text-top;
-  display: inline-block;
-  -webkit-box-shadow: 0 0 1px 0 #888;
-          box-shadow: 0 0 1px 0 #888;
-  background-image: url("../images/flags.png");
-  background-repeat: no-repeat;
-  background-color: #DBDBDB;
-  background-position: 20px 0; }
-
-.ui-telephone__number,
-.ui-telephone__flags {
-  display: inline-block; }

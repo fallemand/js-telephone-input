@@ -1,3 +1,16 @@
+
+.ui-telephone__flag-icon {
+    width: 20px;
+    height: 15px;
+    vertical-align: text-top;
+    display: inline-block;
+    box-shadow: 0 0 1px 0 #888;
+    background-image: url("../images/flags.png");
+    background-repeat: no-repeat;
+    background-color: #DBDBDB;
+    background-position: 20px 0;
+}
+
 @media (min-resolution: 144dpi),
 (min-resolution: 1.5dppx) {
     .ui-telephone__flag-icon {
