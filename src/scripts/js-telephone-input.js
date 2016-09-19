@@ -13,7 +13,7 @@
             return;
         }
 
-        // Create global element references
+        // Create global elements references
         this.LibPhoneNumber = require('awesome-phonenumber');
         this.countriesList = require('./country-list');
         this.field = arguments[0];
@@ -44,7 +44,6 @@
         this.preventKeyup = false;
         this.phoneNumber = null;
         this.exampleNumber = null;
-
 
         //Validate User Default Value
         validateInitialValue(this);
@@ -450,7 +449,7 @@
         }
     }
 
-    // Add events with ie8 fallback
+    // Add events cross browser
     function addEvent(element, event, funct, jsTelephoneInput) {
         var handler = function(e) {
             funct(e, jsTelephoneInput)
@@ -463,7 +462,7 @@
         return handler;
     }
 
-    // remove events with ie8 fallback
+    // remove events cross browser
     function removeEvent(element, event, handler) {
         if (element.removeEventListener) {
             element.removeEventListener(event, handler);
