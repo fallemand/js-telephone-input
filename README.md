@@ -34,6 +34,7 @@ Facundo Allemand (facundo.allemand@mercadolibre.com)
 
 ## TO-DO
 [See the issue tracker](https://github.com/fallemand/js-telephone-input/issues)
+-Improve documentation webpage
 -Add tests.
 -Add new methods.
 -Define as parameter the countries you want
