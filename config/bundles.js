@@ -1,5 +1,3 @@
-var paths = require('./paths');
-
 /**
  * Bundles
  */
@@ -8,7 +6,8 @@ exports.scripts = {
 };
 
 exports.styles = {
-    'js-telephone-input': ['./src/styles/js-telephone-input.scss']
+    'js-telephone-input': ['./src/styles/js-telephone-input.scss'],
+    'js-telephone-input-chico1.1': ['./src/styles/js-telephone-input-chico1.1.scss']
 };
 
 exports.images = {

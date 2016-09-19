@@ -37,7 +37,6 @@ function initializeDemo() {
         "ar","bo","br","cl","co","do","ec","sv","gt","hn","mx","ni","pa","py","pe","pt","uy","ve"
     ];
     var countrySelect = document.getElementById('country');
-
     var option;
     for(var country in countries) {
         option = document.createElement('option');

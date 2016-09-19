@@ -22,9 +22,9 @@
             telError : ' ui-telephone--error',
             telSuccess : ' ui-telephone--success',
             telWithFlag : ' ui-telephone--with-flag',
+            telCanChangeFlag : ' ui-telephone--change-flag',
             telNumber : 'ui-telephone__number',
             telFlags : 'ui-telephone__flags',
-            telFlagsCanChange : ' ui-telephone__flags--can-change',
             telFlagsSelected : 'ui-telephone__selected-flag',
             telFlagsList : 'ui-telephone__flags-list',
             telFlagsListItem : 'ui-telephone__flags-list-item',
@@ -368,7 +368,7 @@
                 elements.telFlags.appendChild(elements.telFlagsList);
                 createCountriesList(elements);
                 createEvents(elements);
-                elements.telFlags.className += jsTelephoneInput.classNames.telFlagsCanChange;
+                elements.tel.className += jsTelephoneInput.classNames.telCanChangeFlag;
             }
         }
 

@@ -1,0 +1,229 @@
+/* --------------------------------------------------------
+    Component Styles
+-------------------------------------------------------- */
+
+.ui-telephone {
+    display: inline-block;
+}
+
+.ui-telephone--with-flag {
+    .ui-telephone__number {
+        margin-left: $input-with-flag-margin-left;
+        input {
+            border-left: $input-border-left;
+        }
+    }
+}
+
+.ui-telephone--change-flag {
+    .ui-telephone__flags {
+        padding-right: 5px;
+        cursor: pointer;
+    }
+
+    .ui-telephone__selected-flag {
+        padding-right: 10px;
+        &:after {
+            top: 50%;
+            right: 0;
+            border: 4px solid transparent;
+            content: "";
+            height: 0;
+            margin-top: -3px;
+            width: 0;
+            position: absolute;
+            border-top-color: #828282;
+        }
+    }
+
+    .ui-telephone__number {
+        margin-left: $input-change-flag-margin-left;
+    }
+}
+
+.ui-telephone--success {
+    .ui-telephone__flags,
+    .ui-telephone__number input,
+    .ui-telephone__number input:hover,
+    .ui-telephone__number input:focus {
+        border: solid 1px $success-border-color;
+        box-shadow: none;
+    }
+
+    .ui-telephone__number:after {
+        background-position: $icons-success-position;
+    }
+}
+
+.ui-telephone--error {
+    .ui-telephone__flags,
+    .ui-telephone__number input,
+    .ui-telephone__number input:hover,
+    .ui-telephone__number input:focus {
+        border: solid 1px $error-border-color;
+        box-shadow: none;
+        background-position: $icons-error-position;
+    }
+}
+
+.ui-telephone--success .ui-telephone__number:after,
+.ui-telephone--error .ui-telephone__number:after {
+    top: 50%;
+    right: 4px;
+    border: 4px solid transparent;
+    content: "";
+    height: 16px;
+    margin-top: -12px;
+    width: 14px;
+    position: absolute;
+    background-image: $icons-validate-sprite;
+    background-repeat: no-repeat;
+}
+
+.ui-telephone__number {
+    position: relative;
+
+    input {
+        font-size: $input-font-size;
+        border: $input-border;
+        letter-spacing: .5px;
+        padding: $input-padding;
+        outline: none;
+        height: $input-height;
+        width: $input-width;
+    }
+}
+
+.ui-telephone__number,
+.ui-telephone__flags {
+    display: inline-block;
+}
+
+/* Validations
+-------------------------------------------------------- */
+
+.ui-telephone__validations {
+    font-size: $validations-font-size;
+    line-height: 0;
+    transition: opacity .3s ease-out, height .5s ease-out;
+    opacity: 0;
+    height: 0;
+    padding: 0;
+    margin: $validations-margin;
+
+    .info {
+        color: $info-color;
+    }
+
+    .zero {
+        &.is-visible {
+            position: relative;
+            opacity: 1;
+            padding: 0 0 3px;
+            height: auto;
+            line-height: 1.4;
+        }
+        position: absolute;
+        transition: opacity .3s ease-out, height .3s ease-out;
+        opacity: 0;
+        height: 0;
+        padding: 0;
+        margin: 0;
+    }
+
+    &.is-visible {
+        position: relative;
+        opacity: 1;
+        padding: 0 0 3px;
+        height: auto;
+        line-height: 1.4;
+    }
+}
+
+.ui-telephone__input-error {
+    background-color: $error-background-color;
+    color: $error-secondary-color;
+}
+
+.ui-telephone__validation--error,
+.ui-telephone__validation--success {
+    display: none;
+    &.is-visible {
+        display: block;
+    }
+}
+
+.ui-telephone__validation--success {
+    color: $validations-success-color;
+}
+
+.ui-telephone__validation--error {
+    color: $validations-error-color;
+}
+
+/* Flags
+-------------------------------------------------------- */
+
+.ui-telephone__flags {
+    background-color: $selected-flag-background-color;
+    vertical-align: bottom;
+    width: 40px;
+    border: 1px solid #ccc;
+    margin: $flag-margin;
+    border-right: none;
+    box-shadow: none;
+}
+
+.ui-telephone__flags-list {
+    position: absolute;
+    transition: opacity .4s ease-out;
+    opacity: 0;
+    height: 0;
+    width: 0;
+    max-height: 190px;
+    overflow: hidden;
+    overflow-y: auto;
+    margin: 1px 0 0 0;
+    background-color: $countries-list-background-color;
+    min-width: $countries-list-background-color;
+    font-size: $countries-list-font-size;
+    border-top: $countries-list-border-top;
+    padding: 0;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+
+    &.is-visible {
+        opacity: 1;
+        height: auto;
+        width: auto;
+        z-index: 2;
+    }
+}
+
+.ui-telephone__selected-flag {
+    position: relative;
+    display: block;
+    height: $flag-height;
+    padding: $flag-padding;
+    text-align: center;
+}
+
+.ui-telephone__flags-list-item {
+    color: black;
+    text-align: left;
+    padding: 6px 2px 6px 10px;
+    text-decoration: none;
+    display: block;
+    &:hover {
+        background-color: $countries-list-hover-color;
+    }
+}
+
+.ui-telephone__flag-name {
+    padding: 0 7px 0 10px;
+}
+
+.ui-telephone__flag-code {
+    color: $info-color;
+}
+
+

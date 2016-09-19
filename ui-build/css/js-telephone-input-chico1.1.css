@@ -808,7 +808,7 @@
   display: inline-block; }
 
 .ui-telephone--with-flag .ui-telephone__number {
-  margin-left: 0; }
+  margin-left: -1px; }
   .ui-telephone--with-flag .ui-telephone__number input {
     border-left: 1px; }
 
@@ -830,7 +830,7 @@
     border-top-color: #828282; }
 
 .ui-telephone--change-flag .ui-telephone__number {
-  margin-left: -5px; }
+  margin-left: -4px; }
 
 .ui-telephone--success .ui-telephone__flags,
 .ui-telephone--success .ui-telephone__number input,
@@ -847,7 +847,7 @@
 .ui-telephone--error .ui-telephone__number input,
 .ui-telephone--error .ui-telephone__number input:hover,
 .ui-telephone--error .ui-telephone__number input:focus {
-  border: solid 1px #EAC9C8;
+  border: solid 1px #EAC9C8 !important;
   -webkit-box-shadow: none;
           box-shadow: none;
   background-position: 0 0; }
@@ -869,9 +869,9 @@
   position: relative; }
   .ui-telephone__number input {
     font-size: 12px;
-    border: 1px solid #ccc;
+    border: 1px solid #ccc !important;
     letter-spacing: .5px;
-    padding: 6px 23px 6px 10px;
+    padding: 6px 23px 6px 10px !important;
     outline: none;
     height: 16px;
     width: 120px; }
@@ -890,7 +890,7 @@
   opacity: 0;
   height: 0;
   padding: 0;
-  margin: 3px 0 0; }
+  margin: 0; }
   .ui-telephone__validations .info {
     color: #999; }
   .ui-telephone__validations .zero {
@@ -938,7 +938,7 @@
   vertical-align: bottom;
   width: 40px;
   border: 1px solid #ccc;
-  margin: 0;
+  margin: 5px 0;
   border-right: none;
   -webkit-box-shadow: none;
           box-shadow: none; }
@@ -970,8 +970,8 @@
 .ui-telephone__selected-flag {
   position: relative;
   display: block;
-  height: 15px;
-  padding: 7px 5px 6px 5px;
+  height: 17px;
+  padding: 5px 5px 6px 5px;
   text-align: center; }
 
 .ui-telephone__flags-list-item {
