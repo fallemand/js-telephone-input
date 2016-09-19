@@ -13,7 +13,7 @@ var deploySwift = require('ui-gulp_tasks/tasks/deploy.swift');
 var deployGHpages = require('ui-gulp_tasks/tasks/deploy.ghpages');
 var tasks = [
     require('ui-gulp_tasks/tasks/build.clean'),
-    require('ui-gulp_tasks/tasks/build.scripts.module'),
+    require('ui-gulp_tasks/tasks/build.scripts.concat'),
     require('ui-gulp_tasks/tasks/build.styles'),
     require('ui-gulp_tasks/tasks/build.images'),
     require('ui-gulp_tasks/tasks/dist.clean'),
@@ -46,7 +46,7 @@ deployGHpages(gulp, paths);
 gulp.task('build', gulpSync.sync([
     'build:clean',
     [
-        'build:scripts-module',
+        'build:scripts-concat',
         'build:styles',
         'build:images'
     ]
@@ -55,7 +55,7 @@ gulp.task('build', gulpSync.sync([
 gulp.task('watch', function () {
     gulp.start('build');
     gulp.watch(['./src/styles/**/*.scss'], ['build:styles']);
-    gulp.watch(['./config/**/*.js', './src/**/*.js'], ['build:scripts-module']);
+    gulp.watch(['./config/**/*.js', './src/**/*.js'], ['build:scripts-concat']);
 });
 
 gulp.task('dist', gulpSync.sync([
