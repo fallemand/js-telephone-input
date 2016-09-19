@@ -5,7 +5,7 @@
     //----------------------------------------------------
     // Define our constructor
     //----------------------------------------------------
-    global.component = function() {
+    global.jsTelephoneInput = function() {
 
         //Check if parameters exists.
         if(!arguments[0] || !arguments[1] || typeof arguments[1] !== "object") {
@@ -61,7 +61,7 @@
     //----------------------------------------------------
 
     // Sets the value on the hidden inputs
-    component.prototype.setInputsValue = function(event, component) {
+    jsTelephoneInput.prototype.setInputsValue = function(event, component) {
         if(this instanceof global.component) {
             component = this;
         }
@@ -89,7 +89,7 @@
     };
 
     // Gets the telephone areaCode and number in json format
-    component.prototype.getTelephone = function() {
+    jsTelephoneInput.prototype.getTelephone = function() {
         var areaCodeLimit = this.field.value.indexOf(' ');
         //If the telephone does not contain spaces, cut the areaCode using the "-"
         if(areaCodeLimit === -1) {
@@ -111,7 +111,7 @@
     };
 
     // Checks if the number is valid
-    component.prototype.isValid = function() {
+    jsTelephoneInput.prototype.isValid = function() {
         if (this.field.value.length === 0) {
             if(!this.parameters.required) {
                 return true;
@@ -122,7 +122,7 @@
     };
 
     // Checks if the number is valid and shows the validations
-    component.prototype.validate = function() {
+    jsTelephoneInput.prototype.validate = function() {
         if (this.field.value.length === 0) {
             this.validations.reset();
             return;
@@ -154,7 +154,7 @@
     };
 
     // Get an example number for the country
-    component.prototype.getExampleNumber = function(countryCode) {
+    jsTelephoneInput.prototype.getExampleNumber = function(countryCode) {
         return this.LibPhoneNumber.getExample(countryCode, 'fixed-line').getNumber('national');
     };
 
