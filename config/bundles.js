@@ -7,7 +7,7 @@ exports.scripts = {
 
 exports.styles = {
     'js-telephone-input': ['./src/styles/js-telephone-input.scss'],
-    'js-telephone-input-chico1.1': ['./src/styles/js-telephone-input-chico1.1.scss']
+    'js-telephone-input-chico': ['./src/styles/js-telephone-input-chico.scss']
 };
 
 exports.images = {
