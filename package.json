@@ -23,6 +23,7 @@
     "url": "https://github.com/mercadolibre/js-telephone-input/issues"
   },
   "devDependencies": {
+    "awesome-phonenumber": "^1.1.1",
     "chai": "3.2.0",
     "chai-spies": "0.7.0",
     "deepmerge": "0.2.10",
@@ -40,6 +41,6 @@
     "phantomjs": "1.9.16",
     "selenium-standalone": "4.4.0",
     "serve": "1.4.0",
-    "ui-gulp_tasks": "^1.9.0"
+    "ui-gulp_tasks": "^1.7.6"
   }
 }

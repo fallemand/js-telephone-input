@@ -28,31 +28,31 @@
 
         <section class="ch-box-lite">
             <h2 class="demo-title">Parameters</h2>
-            <span class="demo-result">Country: </span> <select class="demo-value" id="country"></select> <br />
-            <span class="demo-result">Show Flag: </span> <select class="demo-value" id="withFlag"><option selected>Yes</option><option>No</option></select> <br />
-            <span class="demo-result">Change Flag: </span> <select class="demo-value" id="canChangeCountry"><option selected>Yes</option><option>No</option></select> <br />
-            <span class="demo-result">Required: </span> <select class="demo-value" id="required"><option selected>Yes</option><option>No</option></select> <br />
-            <span class="demo-result">Initial Value: </span> <input class="demo-value" id="initialValue" /> <br />
-            <button id="saveParameters" class="ch-btn ch-btn-small">Refresh</button>
+            <span class="demo-result">Country: </span> <select class="demo-value" data-js="country"></select> <br />
+            <span class="demo-result">Show Flag: </span> <select class="demo-value" data-js="withFlag"><option selected>Yes</option><option>No</option></select> <br />
+            <span class="demo-result">Change Flag: </span> <select class="demo-value" data-js="canChangeCountry"><option selected>Yes</option><option>No</option></select> <br />
+            <span class="demo-result">Required: </span> <select class="demo-value" data-js="required"><option selected>Yes</option><option>No</option></select> <br />
+            <span class="demo-result">Initial Value: </span> <input class="demo-value" data-js="initialValue" /> <br />
+            <button data-js="saveParameters" class="ch-btn ch-btn-small">Refresh</button>
         </section>
 
         <section class="ch-box-lite demo-telephone">
             <h2 class="title">Telephone Input</h2>
             <form>
-                <div id="demo-telephone" class="ui-telephone">
+                <div data-js="demo-telephone" class="ui-telephone">
                     <div class="ui-telephone__number">
-                        <input id="telephone" type="text" value="" data-validations="tel-validations" data-country="ar" data-area-code="telephoneAreaCode" data-number="telephoneNumber" data-full-number="telephoneFullNumber" />
+                        <input data-js="telephone" type="text" value="" data-validations="tel-validations" data-country="ar" data-area-code="telephoneAreaCode" data-number="telephoneNumber" data-full-number="telephoneFullNumber" />
                     </div>
-                    <div id="tel-validations" class="ui-telephone__validations"></div>
+                    <div data-js="tel-validations" class="ui-telephone__validations"></div>
                 </div>
             </form>
         </section>
 
         <section class="ch-box-lite">
             <h2 class="demo-title">Result</h2>
-            <span class="demo-result">Area Code: </span> <input id="telephoneAreaCode" type="text" name="sellerContact.areaCode" /> <br />
-            <span class="demo-result">Phone: </span> <input id="telephoneNumber" type="text" name="sellerContact.phone" /> <br />
-            <span class="demo-result">Full Phone: </span> <input id="telephoneFullNumber" type="text" name="sellerContact.fullPhone" />
+            <span class="demo-result">Area Code: </span> <input data-js="telephoneAreaCode" type="text" name="sellerContact.areaCode" /> <br />
+            <span class="demo-result">Phone: </span> <input data-js="telephoneNumber" type="text" name="sellerContact.phone" /> <br />
+            <span class="demo-result">Full Phone: </span> <input data-js="telephoneFullNumber" type="text" name="sellerContact.fullPhone" />
         </section>
 
     </section>
@@ -89,9 +89,9 @@
                     <xmp>
     <div class="ui-telephone">
         <div class="ui-telephone__number">
-            <input id="telephone" type="text" />
+            <input data-js="telephone" type="text" />
         </div>
-        <div id="tel-validations" class="ui-telephone__validations"></div>
+        <div data-js="tel-validations" class="ui-telephone__validations"></div>
     </div>
                     </xmp>
                 </pre>
@@ -110,7 +110,7 @@
     };
 
     //Initialize component
-    var telephoneInput = document.getElementById('telephone');
+    var telephoneInput = document.querySelector('[data-js="telephone"]');
     telephoneInput = new jsTelephoneInput(telephoneInput, parameters);
 
     //Call method
@@ -189,7 +189,7 @@
             <p>All the parameters can be passed as input attributes. Just transform the parameters camelCase into dash-case and add 'data-' before.</p>
             <pre class="prettyprint">
                 <xmp>
-    <input id="telephone" type="text" data-with-flag="true"
+    <input data-js="telephone" type="text" data-with-flag="true"
        data-can-change-country="true" data-validations="telValidations"
        data-area-code="telAreaCode" data-number="telNumber" />
                 </xmp>

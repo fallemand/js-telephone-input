@@ -1,0 +1,39 @@
+$input-change-flag-margin-left: -5px;
+$input-with-flag-margin-left: 0;
+$input-border-left: 1px;
+$input-font-size: 12px;
+$input-width: 120px;
+$input-height: 16px;
+$input-padding: 6px 23px 6px 10px;
+$input-border: 1px solid #ccc;
+
+$success-color: #C7DBC8;
+$error-color: #EAC9C8;
+$info-color: #999;
+
+$error-background-color: #eac8C8;
+$error-secondary-color: #9a4747;
+
+$success-border-color: $success-color;
+$error-border-color: $error-color;
+
+$icons-validate-sprite: url("../images/sprite-icons-validate.png");
+$icons-success-position: -17px 0;
+$icons-error-position: 0 0;
+
+$validations-font-size: 12px;
+$validations-margin: 3px 0 0;
+$validations-success-color: #52B34E;
+$validations-error-color: #CC6C52;
+
+$flag-margin: 0;
+$flag-padding: 7px 5px 6px 5px;
+$flag-height: 15px;
+
+$selected-flag-background-color: #eee;
+
+$countries-list-background-color: #f9f9f9;
+$countries-list-min-width: 195px;
+$countries-list-font-size: 12px;
+$countries-list-border-top: 1px solid #efefef;
+$countries-list-hover-color: #eee;
