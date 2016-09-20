@@ -18,25 +18,25 @@
         this.countriesList = require('./country-list');
         this.field = field;
         this.classNames = {
-            "tel": 'ui-telephone',
-            "telError": ' ui-telephone--error',
-            "telSuccess": ' ui-telephone--success',
-            "telWithFlag": ' ui-telephone--with-flag',
-            "telCanChangeFlag": ' ui-telephone--change-flag',
-            "telNumber": 'ui-telephone__number',
-            "telFlags": 'ui-telephone__flags',
-            "telFlagsSelected": 'ui-telephone__selected-flag',
-            "telFlagsList": 'ui-telephone__flags-list',
-            "telFlagsListItem": 'ui-telephone__flags-list-item',
-            "telFlagsListItemName": 'ui-telephone__flag-name',
-            "telFlagsListItemIcon": 'ui-telephone__flag-icon',
-            "telFlagsListItemCode": 'ui-telephone__flag-code',
-            "validations": 'ui-telephone__validations',
-            "validationError": 'ui-telephone__validation--error',
-            "validationInfo": 'ui-telephone__validation--info',
-            "validationSuccess": 'ui-telephone__validation--success',
-            "inputErrorClass": ' ui-telephone__input-error',
-            "showClass": ' is-visible'
+            'tel': 'ui-telephone',
+            'telError': ' ui-telephone--error',
+            'telSuccess': ' ui-telephone--success',
+            'telWithFlag': ' ui-telephone--with-flag',
+            'telCanChangeFlag': ' ui-telephone--change-flag',
+            'telNumber': 'ui-telephone__number',
+            'telFlags': 'ui-telephone__flags',
+            'telFlagsSelected': 'ui-telephone__selected-flag',
+            'telFlagsList': 'ui-telephone__flags-list',
+            'telFlagsListItem': 'ui-telephone__flags-list-item',
+            'telFlagsListItemName': 'ui-telephone__flag-name',
+            'telFlagsListItemIcon': 'ui-telephone__flag-icon',
+            'telFlagsListItemCode': 'ui-telephone__flag-code',
+            'validations': 'ui-telephone__validations',
+            'validationError': 'ui-telephone__validation--error',
+            'validationInfo': 'ui-telephone__validation--info',
+            'validationSuccess': 'ui-telephone__validation--success',
+            'inputErrorClass': ' ui-telephone__input-error',
+            'showClass': ' is-visible'
         };
         this.parameters = extendDefaults(parameters, this.field);
         this.elements = getElements(this);
