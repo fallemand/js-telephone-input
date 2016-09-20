@@ -5,42 +5,42 @@
     //----------------------------------------------------
     // Define our constructor
     //----------------------------------------------------
-    global.jsTelephoneInput = function() {
+    global.jsTelephoneInput = function(field, parameters) {
 
         //Check if parameters exists.
-        if(!arguments[0] || !arguments[1] || typeof arguments[1] !== "object") {
-            console.log('js-telephone-input: field or parameters are not defined');
+        if(!field || !parameters || typeof parameters !== "object") {
+            throw new Error('js-telephone-input: field or parameters are not defined');
             return;
         }
 
         // Create global elements references
-        this.LibPhoneNumber = require('awesome-phonenumber');
+        this.libPhoneNumber = require('awesome-phonenumber');
         this.countriesList = require('./country-list');
-        this.field = arguments[0];
+        this.field = field;
         this.classNames = {
-            tel : 'ui-telephone',
-            telError : ' ui-telephone--error',
-            telSuccess : ' ui-telephone--success',
-            telWithFlag : ' ui-telephone--with-flag',
-            telCanChangeFlag : ' ui-telephone--change-flag',
-            telNumber : 'ui-telephone__number',
-            telFlags : 'ui-telephone__flags',
-            telFlagsSelected : 'ui-telephone__selected-flag',
-            telFlagsList : 'ui-telephone__flags-list',
-            telFlagsListItem : 'ui-telephone__flags-list-item',
-            telFlagsListItemName : 'ui-telephone__flag-name',
-            telFlagsListItemIcon : 'ui-telephone__flag-icon',
-            telFlagsListItemCode : 'ui-telephone__flag-code',
-            validations: 'ui-telephone__validations',
-            validationError : 'ui-telephone__validation--error',
-            validationInfo : 'ui-telephone__validation--info',
-            validationSuccess : 'ui-telephone__validation--success',
-            inputErrorClass : ' ui-telephone__input-error',
-            showClass : ' is-visible'
+            "tel": 'ui-telephone',
+            "telError": ' ui-telephone--error',
+            "telSuccess": ' ui-telephone--success',
+            "telWithFlag": ' ui-telephone--with-flag',
+            "telCanChangeFlag": ' ui-telephone--change-flag',
+            "telNumber": 'ui-telephone__number',
+            "telFlags": 'ui-telephone__flags',
+            "telFlagsSelected": 'ui-telephone__selected-flag',
+            "telFlagsList": 'ui-telephone__flags-list',
+            "telFlagsListItem": 'ui-telephone__flags-list-item',
+            "telFlagsListItemName": 'ui-telephone__flag-name',
+            "telFlagsListItemIcon": 'ui-telephone__flag-icon',
+            "telFlagsListItemCode": 'ui-telephone__flag-code',
+            "validations": 'ui-telephone__validations',
+            "validationError": 'ui-telephone__validation--error',
+            "validationInfo": 'ui-telephone__validation--info',
+            "validationSuccess": 'ui-telephone__validation--success',
+            "inputErrorClass": ' ui-telephone__input-error',
+            "showClass": ' is-visible'
         };
-        this.parameters = extendDefaults(arguments[1], this.field);
-        this.validations = getValidations(this);
+        this.parameters = extendDefaults(parameters, this.field);
         this.elements = getElements(this);
+        this.validations = getValidations(this);
         this.preventKeyup = false;
         this.phoneNumber = null;
         this.exampleNumber = null;
@@ -62,30 +62,29 @@
 
     // Sets the value on the hidden inputs
     jsTelephoneInput.prototype.setInputsValue = function(event, component) {
-        if(this instanceof global.component) {
+        if(this instanceof global.jsTelephoneInput) {
             component = this;
         }
         var valid = component.isValid(),
             telephone = component.getTelephone(),
-            numberInput = document.getElementById(component.parameters.number),
-            areaCodeInput = document.getElementById(component.parameters.areaCode),
-            fullNumberInput = document.getElementById(component.parameters.fullNumber);
+            numberInput = querySelector(component.elements.tel, component.parameters.number),
+            areaCodeInput = querySelector(component.elements.tel, component.parameters.areaCode),
+            fullNumberInput = querySelector(component.elements.tel, component.parameters.fullNumber);
 
         if(numberInput) {
-            numberInput.value = (valid) ? telephone.telephone : '';
+            numberInput.value = valid ? telephone.telephone : '';
         }
         if(areaCodeInput) {
-            areaCodeInput.value = (valid) ? telephone.areaCode: '';
+            areaCodeInput.value = valid ? telephone.areaCode : '';
         }
         if(fullNumberInput) {
-            fullNumberInput.value = (valid) ? telephone.fullTelephone: '';
+            fullNumberInput.value = valid ? telephone.fullTelephone : '';
         }
 
         if (valid) {
             component.validations.hide(component.validations.info.zero);
-            return true;
         }
-        return false;
+        return valid;
     };
 
     // Gets the telephone areaCode and number in json format
@@ -103,7 +102,7 @@
         }
         return {
             country: this.parameters.country,
-            countryCode: this.LibPhoneNumber.getCountryCodeForRegionCode(this.parameters.country),
+            countryCode: this.libPhoneNumber.getCountryCodeForRegionCode(this.parameters.country),
             fullTelephone: stripValue(this.field.value).join(''),
             areaCode: stripValue(this.field.value.substring(0, areaCodeLimit)).join(''),
             telephone: stripValue(this.field.value.substring(areaCodeLimit + 1, this.field.value.length)).join('')
@@ -112,13 +111,8 @@
 
     // Checks if the number is valid
     jsTelephoneInput.prototype.isValid = function() {
-        if (this.field.value.length === 0) {
-            if(!this.parameters.required) {
-                return true;
-            }
-            return false;
-        }
-        return this.phoneNumber.isValid();
+        return (!this.parameters.required && this.field.value.length === 0) ||
+            ((this.phoneNumber) ? this.phoneNumber.isValid() : false);
     };
 
     // Checks if the number is valid and shows the validations
@@ -129,21 +123,17 @@
         }
         if(this.isValid()) {
             this.validations.show(this.validations.elements.valid, true, true);
-        }
-        else {
+        } else {
             var reason = this.phoneNumber.toJSON().possibility;
             if(reason) {
                 switch(reason) {
-                    case 'too-short' :
+                    case 'too-short':
                         this.validations.show(this.validations.elements.min, true, false);
                         break;
-                    case 'too-long' :
+                    case 'too-long':
                         this.validations.show(this.validations.elements.max, true, false);
                         break;
-                    case 'unknown' :
-                        //validations.show(validations.elements.notANumber, true, false);
-                        break;
-                    case 'is-possible' :
+                    case 'is-possible':
                         this.validations.show(this.validations.elements.possible, true, false);
                         break;
                 }
@@ -155,7 +145,7 @@
 
     // Get an example number for the country
     jsTelephoneInput.prototype.getExampleNumber = function(countryCode) {
-        return this.LibPhoneNumber.getExample(countryCode, 'fixed-line').getNumber('national');
+        return this.libPhoneNumber.getExample(countryCode, 'fixed-line').getNumber('national');
     };
 
     //----------------------------------------------------
@@ -168,7 +158,7 @@
             component.preventKeyup = false;
             return;
         }
-        component.phoneNumber = component.LibPhoneNumber(component.field.value, component.parameters.country);
+        component.phoneNumber = component.libPhoneNumber(component.field.value, component.parameters.country);
         var telephone = component.phoneNumber.getNumber('national');
         if(telephone) {
             component.field.value = telephone;
@@ -201,18 +191,16 @@
         };
 
         //Checks parameters written as html attributes
-        for (var parameter in defaults) {
+        Object.keys(defaults).forEach(function(parameter) {
             if(field.hasAttribute('data-' + camelCaseToDashCase(parameter))) {
                 defaults[parameter] = field.getAttribute('data-' + camelCaseToDashCase(parameter));
             }
-        }
+        });
 
         //Checks parameters sent as constructor parameters
-        for (var parameter in parameters) {
-            if (parameters.hasOwnProperty(parameter)) {
-                defaults[parameter] = parameters[parameter];
-            }
-        }
+        Object.keys(parameters).forEach(function(parameter) {
+            defaults[parameter] = parameters[parameter];
+        });
 
         return defaults;
     }
@@ -268,7 +256,7 @@
 
         // Define elements
         var validations = {};
-        validations.parent = document.getElementById(component.parameters.validations);
+        validations.parent = querySelector(component.elements.tel, component.parameters.validations);
         validations.elements = {
             valid: createValidation('valid', component.classNames.validationSuccess + ' valid'),
             possible: createValidation('possible', component.classNames.validationError + ' possible'),
@@ -286,13 +274,11 @@
         // Define validations methods
         validations.reset = function (validationExcluded) {
             component.elements.tel.className = component.elements.tel.className.replace(component.classNames.telError, '').replace(component.classNames.telSuccess, '');
-            for (var type in validations.elements) {
-                if (validations.elements.hasOwnProperty(type)) {
-                    if (validationExcluded !== validations.elements[type]) {
-                        validations.elements[type].className = validations.elements[type].className.replace(component.classNames.showClass, '');
-                    }
+            Object.keys(validations.elements).forEach(function(type) {
+                if (validationExcluded !== validations.elements[type]) {
+                    validations.elements[type].className = validations.elements[type].className.replace(component.classNames.showClass, '');
                 }
-            }
+            });
         };
 
         // Show a specific validation
@@ -321,9 +307,9 @@
             var start = validation.innerHTML.indexOf('##'),
                 end = validation.innerHTML.lastIndexOf('##'),
                 variable = validation.innerHTML.substring(start + 2, end);
-            validation.innerHTML = (start > -1) ? validation.innerHTML.replace('##' + variable + '##', getTextToRepalce(variable) ) : validation.innerHTML;
+            validation.innerHTML = (start > -1) ? validation.innerHTML.replace('##' + variable + '##', getTextToReplace(variable) ) : validation.innerHTML;
 
-            function getTextToRepalce(variable) {
+            function getTextToReplace(variable) {
                 switch(variable) {
                     case 'example' : return component.getExampleNumber(component.parameters.country)
                 }
@@ -380,17 +366,17 @@
 
         // Creates list of countries
         function createCountriesList(elements) {
-            for (var i = 0; i < component.countriesList.length; i += 1) {
+            component.countriesList.forEach(function(country) {
                 var listItem = document.createElement('li');
                 var attrCountryCode = document.createAttribute("data-country");
-                attrCountryCode.value = component.countriesList[i][1];
+                attrCountryCode.value = country[1];
                 listItem.setAttributeNode(attrCountryCode);
                 listItem.className = component.classNames.telFlagsListItem;
-                listItem.innerHTML = '<div class="' + component.classNames.telFlagsListItemIcon + ' ' + component.classNames.telFlagsListItemIcon +'--' + component.countriesList[i][1] + '"></div>';
-                listItem.innerHTML += '<span class="' + component.classNames.telFlagsListItemName + '">' + component.countriesList[i][0] + '</span>';
-                listItem.innerHTML += '<span class="' + component.classNames.telFlagsListItemCode + '">' + component.countriesList[i][2] + '</span>';
+                listItem.innerHTML = '<div class="' + component.classNames.telFlagsListItemIcon + ' ' + component.classNames.telFlagsListItemIcon +'--' + country[1] + '"></div>';
+                listItem.innerHTML += '<span class="' + component.classNames.telFlagsListItemName + '">' + country[0] + '</span>';
+                listItem.innerHTML += '<span class="' + component.classNames.telFlagsListItemCode + '">' + country[2] + '</span>';
                 elements.telFlagsList.appendChild(listItem);
-            }
+            })
         }
 
         // Creates events of the component
@@ -424,6 +410,7 @@
                 hideCountryList(false, true);
                 changeInfoExample();
                 setExampleNumber(newCountry, component);
+                component.validations.reset();
                 component.field.value = "";
                 component.setInputsValue();
                 component.validations.reset();
@@ -482,6 +469,11 @@
     // Transforms camelCaseAttributes to dash-case-attributes
     function camelCaseToDashCase(string) {
         return string.replace( /([a-z])([A-Z])/g, '$1-$2' ).toLowerCase();
+    }
+
+    // Gets the element by the data-js
+    function querySelector(parent, element) {
+        return parent.querySelector("[data-js='" + element + "']");
     }
 
 }());

@@ -1,10 +1,10 @@
 <!doctype html>
-<html class="no-js" lang="es">
+<html class="no-js" lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Telephone </title>
+    <title>JsTelephoneInput | Standalone Demo</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -13,18 +13,19 @@
 </head>
 
 <body>
+    <h1>Demo Standalone</h1>
     <form>
         <div class="ui-telephone">
             <div class="ui-telephone__number">
-                <input id="telephone" type="text" />
+                <input data-js="telephone" type="text" />
             </div>
-            <div id="tel-validations" class="ui-telephone__validations"></div>
+            <div data-js="tel-validations" class="ui-telephone__validations"></div>
         </div>
     </form>
 
-    <h3>Resultado</h3>
-    <span class="result">Código Área: </span> <input id="telephoneAreaCode" type="text" /> <br />
-    <span class="result">Teléfono: </span> <input id="telephoneNumber" type="text" />
+    <h2>Resultado</h2>
+    <span class="result">Código Área: </span> <input data-js="telephoneAreaCode" type="text" /> <br />
+    <span class="result">Teléfono: </span> <input data-js="telephoneNumber" type="text" />
 
     <script src="../ui-build/js/js-telephone-input.js"></script>
     <script src="./demo-standalone.js"></script>

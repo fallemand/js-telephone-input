@@ -12,7 +12,7 @@ window.onload = function () {
             'zero': 'Ingrésalo siguiendo el formato de este ejemplo: ##example##'
         },
         parameters = {
-            required: true,
+            required: false,
             withFlag: true,
             country: 'ar',
             messages: messages,
@@ -21,7 +21,7 @@ window.onload = function () {
             number : "telephoneNumber"
         };
 
-    var telephoneInput = document.getElementById('telephone');
+    var telephoneInput = document.querySelector('[data-js="telephone"]');
 
     //Initialize component
     telephoneInput = new jsTelephoneInput(telephoneInput, parameters);

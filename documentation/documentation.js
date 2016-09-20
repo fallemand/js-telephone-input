@@ -18,14 +18,14 @@ function initializeComponent() {
             'zero': 'Ingrésalo siguiendo el formato de este ejemplo: ##example##'
         },
         parameters = {
-            required: (document.getElementById('required').value == 'Yes'),
-            withFlag: (document.getElementById('withFlag').value == 'Yes'),
-            canChangeCountry: (document.getElementById('canChangeCountry').value == 'Yes'),
+            required: (document.querySelector("[data-js='required']").value == 'Yes'),
+            withFlag: (document.querySelector("[data-js='withFlag']").value == 'Yes'),
+            canChangeCountry: (document.querySelector("[data-js='canChangeCountry']").value == 'Yes'),
             messages: messages
         };
 
     //Initialize component
-    var telephoneInput = document.getElementById('telephone');
+    var telephoneInput = document.querySelector("[data-js='telephone']");
     telephoneInput = new jsTelephoneInput(telephoneInput, parameters);
 
 }
@@ -36,7 +36,7 @@ function initializeDemo() {
     var countries = [
         "ar","bo","br","cl","co","do","ec","sv","gt","hn","mx","ni","pa","py","pe","pt","uy","ve"
     ];
-    var countrySelect = document.getElementById('country');
+    var countrySelect = document.querySelector("[data-js='country']");
     var option;
     for(var country in countries) {
         option = document.createElement('option');
@@ -45,19 +45,19 @@ function initializeDemo() {
     }
 
     //Button event
-    var saveButton = document.getElementById('saveParameters');
+    var saveButton = document.querySelector("[data-js='saveParameters']");
     saveButton.onclick = function() {changeParameters()};
 }
 
 function changeParameters() {
-    var initialValue = document.getElementById('initialValue').value;
-    var tel = document.getElementById('demo-telephone');
+    var initialValue = document.querySelector("[data-js='initialValue']").value;
+    var tel = document.querySelector("[data-js='demo-telephone']");
     tel.className = 'ui-telephone';
     var telNumber = document.createElement('div');
     telNumber.className = 'ui-telephone__number';
-    telNumber.innerHTML = '<input id="telephone" type="text" value="' + initialValue + '" data-validations="tel-validations" data-country="' + document.getElementById('country').value + '" data-area-code="telephoneAreaCode" data-full-number="telephoneFullNumber" data-number="telephoneNumber" />';
+    telNumber.innerHTML = '<input data-js="telephone" type="text" value="' + initialValue + '" data-validations="tel-validations" data-country="' + document.querySelector("[data-js='country']").value + '" data-area-code="telephoneAreaCode" data-full-number="telephoneFullNumber" data-number="telephoneNumber" />';
     var telValidations = document.createElement('div');
-    telValidations.id = 'tel-validations';
+    telValidations.setAttribute('data-js', 'tel-validations');
     telValidations.className = 'ui-telephone__validations';
     tel.innerHTML = '';
     tel.appendChild(telNumber);
