@@ -19,10 +19,10 @@
         this.field = field;
         this.classNames = {
             'tel': 'ui-telephone',
-            'telError': ' ui-telephone--error',
-            'telSuccess': ' ui-telephone--success',
-            'telWithFlag': ' ui-telephone--with-flag',
-            'telCanChangeFlag': ' ui-telephone--change-flag',
+            'telError': 'ui-telephone--error',
+            'telSuccess': 'ui-telephone--success',
+            'telWithFlag': 'ui-telephone--with-flag',
+            'telCanChangeFlag': 'ui-telephone--change-flag',
             'telNumber': 'ui-telephone__number',
             'telFlags': 'ui-telephone__flags',
             'telFlagsSelected': 'ui-telephone__selected-flag',
@@ -35,8 +35,8 @@
             'validationError': 'ui-telephone__validation--error',
             'validationInfo': 'ui-telephone__validation--info',
             'validationSuccess': 'ui-telephone__validation--success',
-            'inputErrorClass': ' ui-telephone__input-error',
-            'showClass': ' is-visible'
+            'inputErrorClass': 'ui-telephone__input-error',
+            'showClass': 'is-visible'
         };
         this.parameters = extendDefaults(parameters, this.field);
         this.elements = getElements(this);
@@ -236,9 +236,9 @@
 
         function highlightInput() {
             if (!component.field.className || component.field.className.indexOf(component.classNames.inputErrorClass) === -1) {
-                component.field.className += component.classNames.inputErrorClass;
+                addClass(component.classNames.inputErrorClass, component.field);
                 setTimeout(function () {
-                    component.field.className = component.field.className.replace(component.classNames.inputErrorClass, '');
+                    removeClass(component.classNames.inputErrorClass, component.field);
                 }, 200);
             }
         }
@@ -273,10 +273,11 @@
 
         // Define validations methods
         validations.reset = function (validationExcluded) {
-            component.elements.tel.className = component.elements.tel.className.replace(component.classNames.telError, '').replace(component.classNames.telSuccess, '');
+            removeClass(component.classNames.telError, component.elements.tel);
+            removeClass(component.classNames.telSuccess, component.elements.tel);
             Object.keys(validations.elements).forEach(function(type) {
                 if (validationExcluded !== validations.elements[type]) {
-                    validations.elements[type].className = validations.elements[type].className.replace(component.classNames.showClass, '');
+                    removeClass(component.classNames.showClass, validations.elements[type]);
                 }
             });
         };
@@ -289,16 +290,16 @@
             if (isValid !== undefined) {
                 var telClass = (isValid) ? component.classNames.telSuccess : component.classNames.telError;
                 if (component.elements.tel.className.indexOf(telClass) === -1) {
-                    component.elements.tel.className += telClass;
+                    addClass(telClass, component.elements.tel);
                 }
             }
-            validations.parent.className += (validations.parent.className.indexOf(component.classNames.showClass) === -1) ? component.classNames.showClass : '';
-            validation.className += (validation.className.indexOf(component.classNames.showClass) === -1) ? component.classNames.showClass : '';
+            addClass(component.classNames.showClass, validations.parent, component.classNames.showClass);
+            addClass(component.classNames.showClass, validation, component.classNames.showClass);
         };
 
         //Hide a specific validation
         validations.hide = function (validation) {
-            validation.className = validation.className.replace(component.classNames.showClass, '');
+            removeClass(component.classNames.showClass, validation);
             //syi.validationsFixer.fixValidationsPosition();
         };
 
@@ -338,9 +339,9 @@
         elements.telNumber = findAncestor(component.field, component.classNames.telNumber);
 
         if (component.parameters.withFlag) {
-            elements.tel.className += component.classNames.telWithFlag;
+            addClass(component.classNames.telWithFlag, elements.tel);
             elements.telFlags = document.createElement('div');
-            elements.telFlags.className = component.classNames.telFlags;
+            addClass(component.classNames.telFlags, elements.telFlags);
             elements.tel.insertBefore(elements.telFlags, elements.tel.firstChild);
             elements.telFlagsSelected = document.createElement('div');
             elements.telFlagsSelected.className = component.classNames.telFlagsSelected;
@@ -349,11 +350,11 @@
 
             if (component.parameters.canChangeCountry) {
                 elements.telFlagsList = document.createElement('ul');
-                elements.telFlagsList.className = component.classNames.telFlagsList;
+                addClass(component.classNames.telFlagsList, elements.telFlagsList);
                 elements.telFlags.appendChild(elements.telFlagsList);
                 createCountriesList(elements);
                 createEvents(elements);
-                elements.tel.className += component.classNames.telCanChangeFlag;
+                addClass(component.classNames.telCanChangeFlag, elements.tel);
             }
         }
 
@@ -385,19 +386,16 @@
             var hideCountryListHandler;
 
             function showCountryList() {
-                if (elements.telFlagsList.className.indexOf('is-visible') > -1) {
-                    elements.telFlagsList.className = elements.telFlagsList.className.replace(component.classNames.showClass, '');
+                if (elements.telFlagsList.className.indexOf(component.classNames.showClass) > -1) {
+                    removeClass(component.classNames.showClass, elements.telFlagsList)
                 } else {
-                    elements.telFlagsList.className = component.classNames.telFlagsList + component.classNames.showClass;
+                    addClass(component.classNames.showClass, elements.telFlagsList);
                     hideCountryListHandler = addEvent(document, 'mouseup', hideCountryList);
                 }
             }
 
-            function hideCountryList(event, force) {
-                if ((event && event.target.className.indexOf('tel-flags') === -1) || force) {
-                    elements.telFlagsList.className = elements.telFlagsList.className.replace(component.classNames.showClass, '');
-
-                }
+            function hideCountryList() {
+                removeClass(component.classNames.showClass, elements.telFlagsList);
                 removeEvent(document, 'mouseup', hideCountryListHandler);
             }
 
@@ -407,7 +405,7 @@
                     newCountry = event.target.parentNode.getAttribute('data-country');
                 }
                 changeSelectedFlag(component.parameters.country, newCountry);
-                hideCountryList(false, true);
+                hideCountryList();
                 changeInfoExample();
                 setExampleNumber(newCountry, component);
                 component.validations.reset();
@@ -474,6 +472,18 @@
     // Gets the element by the data-js
     function querySelector(parent, element) {
         return parent.querySelector("[data-js='" + element + "']");
+    }
+
+    //Remove the css class from the element
+    function removeClass(cssClass, element) {
+        element.className = element.className.replace(new RegExp('(?:^|\\s)'+cssClass+'(?!\\S)') , '');
+    }
+
+    //Remove the css class from the element
+    function addClass(cssClass, element, condition) {
+        if(!condition || (condition && element.className.indexOf(condition) === -1)) {
+            element.className += (element.className.length > 0) ?  ' ' + cssClass : cssClass;
+        }
     }
 
 }());
