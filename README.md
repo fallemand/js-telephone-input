@@ -1,6 +1,6 @@
 # jsTelephoneInput
 
-## Overview
+## Attention
 This version is deprecated. A new one will be realesed.
 Check: https://mercadolibre.github.io/ui-telephone_input_component/docs/dist/
 
