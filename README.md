@@ -1,6 +1,10 @@
 # jsTelephoneInput
 
 ## Overview
+This version is deprecated. A new one will be realesed.
+Check: https://mercadolibre.github.io/ui-telephone_input_component/docs/dist/
+
+## Overview
 Vanilla JS library to validate international telephones. It uses a precompiled and express version of the [google's libphonenumber](https://github.com/googlei18n/libphonenumber) called [awesome-phonenumber](https://github.com/grantila/awesome-phonenumber).
 
 ![enjzuhgyk8](https://cloud.githubusercontent.com/assets/16105726/18643322/fe9a2380-7e7a-11e6-8033-fe5226085690.gif)
