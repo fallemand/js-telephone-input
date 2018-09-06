@@ -10,7 +10,7 @@ Vanilla JS library to validate international telephones. It uses a precompiled a
 ![enjzuhgyk8](https://cloud.githubusercontent.com/assets/16105726/18643322/fe9a2380-7e7a-11e6-8033-fe5226085690.gif)
 
 ## How to use
-[Demo Standalone](https://fallemand.github.io/js-telephone-input/demo/demo-standalone.html)
+[Demo Standalone](https://fallemand.github.io/js-telephone-input/demo/demo-standalone.html)  
 [Documentation](https://fallemand.github.io/js-telephone-input/documentation/)
 
 ## Development
@@ -37,9 +37,9 @@ Facundo Allemand (facundo.allemand@mercadolibre.com)
 [See releases](https://github.com/fallemand/js-telephone-input/releases)
 
 ## TO-DO
-[See the issue tracker](https://github.com/fallemand/js-telephone-input/issues)
--Improve documentation webpage
--Add tests.
--Add new methods.
--Define as parameter the countries you want
--Document with [jsDocs](http://usejsdoc.org/)
+[See the issue tracker](https://github.com/fallemand/js-telephone-input/issues)  
+-Improve documentation webpage  
+-Add tests.  
+-Add new methods.  
+-Define as parameter the countries you want  
+-Document with [jsDocs](http://usejsdoc.org/)  
